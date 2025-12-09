@@ -1,17 +1,15 @@
 "use client";
 import { useState, useEffect } from "react";
-import { LogIn, Eye, EyeOff, AlertCircle } from "lucide-react";
+import { Mail, Eye, EyeOff, AlertCircle, Sparkles } from "lucide-react";
 import { useTranslation } from "@/app/i18n/I18nProvider";
-import { useTheme } from "@/app/theme/ThemeProvider";
 import { useRouter } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
 
 export default function LoginForm() {
     const { t } = useTranslation();
-    const { theme } = useTheme();
     const router = useRouter();
 
-    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -28,7 +26,7 @@ export default function LoginForm() {
     if (status === "loading") {
         return (
             <div className="min-h-screen flex items-center justify-center">
-                {/* krátky placeholder/loader počas overovania session */}
+                <div className="animate-bounce-subtle text-6xl">🌍</div>
             </div>
         );
     }
@@ -41,102 +39,145 @@ export default function LoginForm() {
         setIsLoading(true);
         setError("");
 
-        if (!username.trim() || password.length < 6) {
-            setError(t("login.validationError"));
+        if (!email.trim() || !email.includes("@")) {
+            setError("Please enter a valid email address");
+            setIsLoading(false);
+            return;
+        }
+
+        if (password.length < 6) {
+            setError("Password must be at least 6 characters");
             setIsLoading(false);
             return;
         }
 
         const result = await signIn("credentials", {
-            username,
-            password,
             redirect: false,
+            email: email,
+            password: password,
         });
 
         if (result?.error) {
-            setError(t("login.serverError"));
+            setError("Invalid email or password. Please try again!");
             setIsLoading(false);
         } else {
             router.push("/");
         }
     };
+
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-light dark:bg-gradient-dark">
-            <div className="w-full max-w-md px-4 sm:px-6 lg:px-8">
-                <div className="bg-card backdrop-blur-xl rounded-2xl shadow-xl border border-gray-200 dark:border-gray-800 p-8">
+        <div className="min-h-screen flex items-center justify-center px-4 py-12 relative overflow-hidden">
+            {/* Playful Background Elements */}
+            <div className="absolute inset-0 opacity-10">
+                <div className="absolute top-10 left-10 w-32 h-32 bg-primary rounded-full animate-float"></div>
+                <div className="absolute top-40 right-20 w-24 h-24 bg-secondary rounded-full animate-bounce-subtle"></div>
+                <div className="absolute bottom-20 left-1/3 w-40 h-40 bg-accent rounded-full animate-float" style={{animationDelay: '1s'}}></div>
+                <div className="absolute bottom-40 right-1/4 w-28 h-28 bg-primary rounded-full animate-bounce-subtle" style={{animationDelay: '2s'}}></div>
+            </div>
+
+            <div className="w-full max-w-md relative z-10">
+                <div className="card-playful p-8 md:p-10">
                     {/* Header */}
                     <div className="text-center mb-8">
-                        <div className="mx-auto w-16 h-16 bg-linear-to-r cl-decor rounded-full flex items-center justify-center mb-4 shadow-lg">
-                            <LogIn className="w-8 h-8 text-white" />
-                        </div>
-                        <h2 className="text-color text-3xl font-bold text-gray-900 dark:text-white mb-2">
-                            {t("login.title")}
-                        </h2>
-                        <p className="text-color text-gray-600 dark:text-gray-300">{t("login.subtitle")}</p>
+                        <div className="text-6xl mb-4 animate-bounce-subtle">🌍</div>
+                        <h1 className="text-4xl font-black mb-2 bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent">
+                            Welcome Back!
+                        </h1>
+                        <p className="text-muted">Log in to continue your language adventure</p>
                     </div>
 
                     {/* Error Message */}
                     {error && (
-                        <div className="mb-6 p-4 bg-[#600000]/10 dark:bg-[#600000]/10 border border-[#600000]/50 dark:border-[#600000]/50 rounded-lg flex items-center gap-3">
-                            <AlertCircle className="w-5 h-5 text-[#600000]" />
-                            <span className="text-sm text-[#600000]">{error}</span>
+                        <div className="mb-6 p-4 bg-error/10 border-2 border-error rounded-2xl flex items-start space-x-3">
+                            <AlertCircle className="text-error flex-shrink-0 mt-0.5" size={20} />
+                            <p className="text-sm text-error font-semibold">{error}</p>
                         </div>
                     )}
 
-                    {/* Form */}
+                    {/* Login Form */}
                     <form onSubmit={handleSubmit} className="space-y-6">
-                        {/* Username */}
+                        {/* Email Input */}
                         <div>
-                            <label htmlFor="username" className="text-color block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                {t("login.username")}
+                            <label htmlFor="email" className="block text-sm font-bold text-primary mb-2">
+                                📧 Email Address
                             </label>
-                            <input
-                                id="username"
-                                name="username"
-                                type="text"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
-                                className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 focus:ring-[#600000] focus:border-[#600000] bg-white/50 dark:bg-gray-900/50 focus:ring-2"
-                                placeholder={t("login.usernamePlaceholder")}
-                                disabled={isLoading}
-                            />
+                            <div className="relative">
+                                <input
+                                    id="email"
+                                    type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    className="w-full px-4 py-3 pl-12 bg-card border-2 border-gray-300 dark:border-gray-600 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-primary"
+                                    placeholder="your@email.com"
+                                    required
+                                    disabled={isLoading}
+                                />
+                                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-muted" size={20} />
+                            </div>
                         </div>
 
-                        {/* Password */}
+                        {/* Password Input */}
                         <div>
-                            <label htmlFor="password" className="text-color block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                {t("login.password")}
+                            <label htmlFor="password" className="block text-sm font-bold text-primary mb-2">
+                                🔒 Password
                             </label>
                             <div className="relative">
                                 <input
                                     id="password"
-                                    name="password"
                                     type={showPassword ? "text" : "password"}
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 focus:ring-[#600000] focus:border-[#600000] bg-white/50 dark:bg-gray-900/50 focus:ring-2"
-                                    placeholder={t("login.passwordPlaceholder")}
+                                    className="w-full px-4 py-3 pr-12 bg-card border-2 border-gray-300 dark:border-gray-600 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-primary"
+                                    placeholder="••••••••"
+                                    required
                                     disabled={isLoading}
                                 />
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2"
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-muted hover:text-primary transition-colors"
                                 >
-                                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                                 </button>
                             </div>
                         </div>
 
-                        {/* Submit button */}
+                        {/* Submit Button */}
                         <button
                             type="submit"
                             disabled={isLoading}
-                            className="w-full py-2 px-4 bg-linear-to-r cl-decor cursor-pointer text-white rounded-lg hover:from-[#4b0000] hover:to-[#600000] transition-all duration-300"
+                            className="w-full btn-primary py-4 text-lg font-black flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            {isLoading ? t("login.signingIn") : t("login.signIn")}
+                            {isLoading ? (
+                                <>
+                                    <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
+                                    <span>Logging In...</span>
+                                </>
+                            ) : (
+                                <>
+                                    <Sparkles size={20} />
+                                    <span>Start Learning!</span>
+                                </>
+                            )}
                         </button>
                     </form>
+
+                    {/* Footer */}
+                    <div className="mt-6 text-center">
+                        <p className="text-sm text-muted">
+                            Don't have an account?{" "}
+                            <button className="text-primary font-bold hover:text-secondary transition-colors">
+                                Sign Up Free
+                            </button>
+                        </p>
+                    </div>
+                </div>
+
+                {/* Fun Tip */}
+                <div className="mt-6 p-4 bg-accent/10 rounded-2xl text-center">
+                    <p className="text-sm font-semibold text-accent">
+                        💡 Tip: Practice for just 10 minutes daily to see amazing progress!
+                    </p>
                 </div>
             </div>
         </div>

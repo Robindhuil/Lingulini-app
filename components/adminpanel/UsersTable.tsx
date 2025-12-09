@@ -70,9 +70,6 @@ export default function UsersTable() {
                                     {t("adminPanel.table.id")}
                                 </th>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                    {t("adminPanel.table.username")}
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                     <Mail className="w-4 h-4 inline mr-1" />
                                     {t("adminPanel.table.email")}
                                 </th>
@@ -103,14 +100,7 @@ export default function UsersTable() {
                                         #{user.id}
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
-                                        {user.username}
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
-                                        {user.email || (
-                                            <span className="text-gray-400 dark:text-gray-600 italic">
-                                                {t("adminPanel.table.noEmail")}
-                                            </span>
-                                        )}
+                                        {user.email}
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
                                         {user.name || (

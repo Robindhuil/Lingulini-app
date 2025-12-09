@@ -6,10 +6,11 @@ export async function GET() {
         const users = await prisma.user.findMany({
             select: {
                 id: true,
-                username: true,
                 email: true,
                 name: true,
                 role: true,
+                nativeLanguage: true,
+                learningLanguages: true,
                 createdAt: true,
                 updatedAt: true,
             },
@@ -17,6 +18,7 @@ export async function GET() {
         });
         return NextResponse.json(users);
     } catch (error) {
+        console.error('Error fetching users:', error);
         return NextResponse.json({ error: "Failed to fetch users" }, { status: 500 });
     }
 }

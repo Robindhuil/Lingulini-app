@@ -1,4 +1,3 @@
-import "dotenv/config"; // <- toto načíta .env premenné
 import { defineConfig, env } from "prisma/config";
 
 export default defineConfig({
@@ -7,8 +6,7 @@ export default defineConfig({
     path: "prisma/migrations",
     seed: `tsx prisma/seed.ts`,
   },
-  engine: "classic",
   datasource: {
-    url: env("DATABASE_URL"), // teraz už Prisma vidí DATABASE_URL
+    url: env("DATABASE_URL"), // DATABASE_URL sa načíta z .env
   },
 });

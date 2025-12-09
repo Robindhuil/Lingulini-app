@@ -1,9 +1,10 @@
 export type User = {
     id: number;
-    username: string;
-    email: string | null;
+    email: string;
     name: string | null;
     role: "USER" | "ADMIN";
+    nativeLanguage: string | null;
+    learningLanguages: string[];
     createdAt: Date;
     updatedAt: Date;
 };

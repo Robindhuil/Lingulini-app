@@ -1,38 +1,134 @@
 "use client";
 import { useTranslation } from "@/app/i18n/I18nProvider";
-import { useTheme } from "@/app/theme/ThemeProvider";
-import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+
+const languages = [
+  { 
+    code: 'en', 
+    name: 'English', 
+    nativeName: 'English',
+    flag: '🇬🇧',
+    gradient: 'from-blue-400 to-blue-600'
+  },
+  // { 
+  //   code: 'es', 
+  //   name: 'Spanish', 
+  //   nativeName: 'Español',
+  //   flag: '🇪🇸',
+  //   gradient: 'from-red-400 to-red-600'
+  // },
+  // { 
+  //   code: 'fr', 
+  //   name: 'French', 
+  //   nativeName: 'Français',
+  //   flag: '🇫🇷',
+  //   gradient: 'from-purple-400 to-purple-600'
+  // },
+  // { 
+  //   code: 'de', 
+  //   name: 'German', 
+  //   nativeName: 'Deutsch',
+  //   flag: '🇩🇪',
+  //   gradient: 'from-green-400 to-green-600'
+  // },
+];
 
 export default function HomePage() {
   const { t } = useTranslation();
-  const { theme } = useTheme();
+  const router = useRouter();
+  const [selectedLang, setSelectedLang] = useState<string | null>(null);
+
+  const handleLanguageSelect = (langCode: string) => {
+    setSelectedLang(langCode);
+    // TODO: Navigate to learning path or save preference
+    console.log('Selected language:', langCode);
+  };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center bg-gradient-light dark:bg-gradient-dark">
-      <div className="relative w-full max-w-7xl px-2 sm:px-4 lg:px-6 text-center">
-        <div className="mb-12">
-          <Image
-            src={theme === 'light' ? '/logos/light/full_logo.svg' : '/logos/dark/full_logo.svg'}
-            alt="Full Logo"
-            width={200}
-            height={100}
-            priority
-            className="mx-auto w-auto h-auto transition-transform duration-500 hover:scale-105"
-          />
-        </div>
-        <h1 className="text-5xl sm:text-6xl font-bold text-[#600000] mb-6 tracking-tight">{t("home.title")}</h1>
-        <p className="text-lg sm:text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto mb-10 leading-relaxed">
-          {t("home.subtitle")}
+    <div className="min-h-screen pb-20">
+      {/* Language Selection Section */}
+      <section className="max-w-6xl mx-auto px-4 py-16">
+        <h2 className="text-4xl md:text-5xl font-black text-center mb-4 text-primary">
+          Choose Your Language Adventure! 🗣️
+        </h2>
+        <p className="text-center text-lg text-secondary mb-12">
+          Pick a language you want to learn and start your journey
         </p>
-        <div className="flex flex-col sm:flex-row justify-center gap-4">
-          <a href="#get-started" className="px-8 py-4 bg-linear-to-r from-[#600000] to-[#4b0000] text-white font-semibold rounded-lg shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300">
-            {t("home.getStarted")}
-          </a>
-          <a href="#learn-more" className="px-8 py-4 border border-[#600000] text-[#600000] dark:border-gray-600 dark:text-gray-300 rounded-lg font-semibold hover:bg-[#600000]/10 dark:hover:bg-[#600000]/20 hover:scale-105 transition-all duration-300">
-            {t("home.learnMore")}
-          </a>
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {languages.map((lang) => (
+            <button
+              key={lang.code}
+              onClick={() => handleLanguageSelect(lang.code)}
+              className={`card-playful text-center p-8 cursor-pointer border-4 transition-all ${
+                selectedLang === lang.code 
+                  ? 'border-primary scale-105' 
+                  : 'border-transparent hover:border-secondary'
+              }`}
+            >
+              <div className="text-6xl mb-4 animate-bounce-subtle">{lang.flag}</div>
+              <h3 className="text-2xl font-bold mb-2 text-primary">{lang.name}</h3>
+              <p className="text-lg text-muted">{lang.nativeName}</p>
+              <div className={`mt-4 h-2 rounded-full bg-linear-to-r ${lang.gradient}`}></div>
+            </button>
+          ))}
         </div>
-      </div>
-    </section>
+      </section>
+
+      {/* Features Section */}
+      {/* <section className="max-w-6xl mx-auto px-4 py-16">
+        <h2 className="text-4xl md:text-5xl font-black text-center mb-12 text-primary">
+          Why Kids Love Lingulini! 💖
+        </h2>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="card-playful text-center">
+            <div className="text-6xl mb-4">🎮</div>
+            <h3 className="text-2xl font-bold mb-3 text-primary">Fun Games</h3>
+            <p className="text-muted">
+              Learn through interactive games and challenges that make studying feel like playing!
+            </p>
+          </div>
+          
+          <div className="card-playful text-center">
+            <div className="text-6xl mb-4">📖</div>
+            <h3 className="text-2xl font-bold mb-3 text-primary">Exciting Stories</h3>
+            <p className="text-muted">
+              Dive into magical stories and adventures while learning new words and phrases!
+            </p>
+          </div>
+          
+          <div className="card-playful text-center">
+            <div className="text-6xl mb-4">🏆</div>
+            <h3 className="text-2xl font-bold mb-3 text-primary">Earn Rewards</h3>
+            <p className="text-muted">
+              Collect badges, unlock levels, and track your progress as you become a language master!
+            </p>
+          </div>
+        </div>
+      </section> */}
+
+      {/* Stats Section */}
+      {/* <section className="max-w-6xl mx-auto px-4 py-16">
+        <div className="gradient-fun rounded-3xl p-12 text-white text-center">
+          <h2 className="text-4xl font-black mb-8">Join Our Growing Community!</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div>
+              <div className="text-5xl font-black mb-2">10,000+</div>
+              <div className="text-xl opacity-90">Happy Learners</div>
+            </div>
+            <div>
+              <div className="text-5xl font-black mb-2">4</div>
+              <div className="text-xl opacity-90">Languages Available</div>
+            </div>
+            <div>
+              <div className="text-5xl font-black mb-2">1M+</div>
+              <div className="text-xl opacity-90">Lessons Completed</div>
+            </div>
+          </div>
+        </div>
+      </section> */}
+    </div>
   );
 }

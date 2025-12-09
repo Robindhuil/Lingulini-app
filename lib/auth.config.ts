@@ -1,26 +1,30 @@
 import { PrismaClient } from '@prisma/client'
+import { PrismaPg } from '@prisma/adapter-pg'
+import { Pool } from 'pg'
 import { compare } from 'bcryptjs'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import type { NextAuthConfig } from 'next-auth'
 
-const prisma = new PrismaClient()
+const pool = new Pool({ connectionString: process.env.DATABASE_URL })
+const adapter = new PrismaPg(pool)
+const prisma = new PrismaClient({ adapter })
 
 export const authConfig: NextAuthConfig = {
     providers: [
         CredentialsProvider({
             name: 'Credentials',
             credentials: {
-                username: { label: 'Username', type: 'text' },
+                email: { label: 'Email', type: 'email' },
                 password: { label: 'Password', type: 'password' },
             },
             async authorize(credentials) {
-                const username = credentials?.username as string | undefined
+                const email = credentials?.email as string | undefined
                 const password = credentials?.password as string | undefined
 
-                if (!username || !password) return null
+                if (!email || !password) return null
 
                 const user = await prisma.user.findUnique({
-                    where: { username },
+                    where: { email },
                 })
 
                 if (!user) return null
@@ -30,7 +34,7 @@ export const authConfig: NextAuthConfig = {
 
                 return {
                     id: user.id.toString(),
-                    name: user.username,
+                    name: user.name || user.email,
                     email: user.email,
                     role: user.role,
                 }
