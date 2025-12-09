@@ -1,0 +1,62 @@
+{
+    "navbar": {
+        "home": "Home",
+        "about": "About",
+        "contact": "Contact",
+        "news": "News",
+        "gallery": "Gallery",
+        "login": "Sign In",
+        "signOut": "Sign Out"
+    },
+    "home": {
+        "title": "Welcome to MyApp",
+        "subtitle": "Build modern web apps faster with Next.js and Tailwind CSS.",
+        "getStarted": "Get Started",
+        "learnMore": "Learn More"
+    },
+    "footer": {
+        "newsletter": "Newsletter",
+        "getUpdates": "Get updates",
+        "subscribe": "Subscribe",
+        "rights": "All rights reserved.",
+        "terms": "Terms",
+        "security": "Security",
+        "contact": "Contact"
+    },
+    "login": {
+        "title": "Welcome back",
+        "subtitle": "Sign in to your account",
+        "username": "Username",
+        "usernamePlaceholder": "Enter username",
+        "usernameRequired": "Username is required",
+        "usernameMinLength": "Username must be at least 3 characters",
+        "password": "Password",
+        "passwordPlaceholder": "Enter password",
+        "passwordRequired": "Password is required",
+        "passwordMinLength": "Password must be at least 6 characters",
+        "signIn": "Sign In",
+        "signingIn": "Signing in...",
+        "serverError": "Server error. Please try again."
+    },
+    "adminPanel": {
+        "title": "Admin Panel",
+        "usersTab": "Users",
+        "adminTab": "Admin",
+        "usersSection": "User list will be here...",
+        "adminSection": "Administrative settings will be here...",
+        "usersList": "List of users",
+        "totalUsers": "Count of users:",
+        "noUsers": "No users yet",
+        "table": {
+            "id": "ID",
+            "username": "Username",
+            "email": "Email",
+            "name": "Name",
+            "role": "Role",
+            "created": "Created",
+            "updated": "Updated",
+            "noEmail": "no email",
+            "noName": "no name"
+        }
+    }
+}

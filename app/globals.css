@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --background: #ffffff;
+    --foreground: #282828;
+    --navbar-bg: linear-gradient(to right, rgba(15, 26, 45, 0.95), rgba(0, 0, 0, 0.95));
+    --card-bg: #d0cece;
+    --text-color: #000000;
+    --colored-decor: #9e0a0a;
+    --colored-decor-hover: #7a0808;
+
+  }
+
+  .dark {
+    --background: #12131b;
+    --foreground: #b3b3b3;
+    --navbar-bg: linear-gradient(to right, rgba(15, 26, 45, 0.95), rgba(0, 0, 0, 0.95));
+    --card-bg: rgba(7, 10, 21, 0.8);
+    --text-color: #ffffff;
+    --colored-decor: #600000;
+    --colored-decor-hover: #4b0000;
+  }
+}
+
+html,
+body {
+  @apply min-h-screen;
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.bg-gradient-light {
+  background: var(--background);
+}
+
+.bg-gradient-dark {
+  background: linear-gradient(to right, rgba(15, 26, 45, 0.95), rgba(0, 0, 0, 0.95));
+}
+
+.bg-navbar {
+  background: var(--navbar-bg);
+}
+
+.bg-card {
+  background: var(--card-bg);
+}
+
+.text-color {
+  color: var(--text-color);
+}
+
+.cl-decor {
+  background: var(--colored-decor);
+}
+
+.cl-decor:hover {
+  background: var(--colored-decor-hover);
+}

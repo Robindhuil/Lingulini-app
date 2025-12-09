@@ -1,0 +1,62 @@
+{
+    "navbar": {
+        "home": "Domov",
+        "about": "O nás",
+        "contact": "Kontakt",
+        "news": "Novinky",
+        "gallery": "Galéria",
+        "login": "Prihlásiť sa",
+        "signOut": "Odhlásiť sa"
+    },
+    "home": {
+        "title": "Vitajte v MyApp",
+        "subtitle": "Vytvárajte moderné webové aplikácie rýchlejšie s Next.js a Tailwind CSS.",
+        "getStarted": "Začať",
+        "learnMore": "Viac informácií"
+    },
+    "footer": {
+        "newsletter": "Newsletter",
+        "getUpdates": "Získaj novinky",
+        "subscribe": "Prihlásiť sa",
+        "rights": "Všetky práva vyhradené.",
+        "terms": "Podmienky",
+        "security": "Bezpečnosť",
+        "contact": "Kontakt"
+    },
+    "login": {
+        "title": "Vitajte späť",
+        "subtitle": "Prihláste sa do svojho účtu",
+        "username": "Používateľské meno",
+        "usernamePlaceholder": "Zadajte používateľské meno",
+        "usernameRequired": "Používateľské meno je povinné",
+        "usernameMinLength": "Používateľské meno musí mať aspoň 3 znaky",
+        "password": "Heslo",
+        "passwordPlaceholder": "Zadajte heslo",
+        "passwordRequired": "Heslo je povinné",
+        "passwordMinLength": "Heslo musí mať aspoň 6 znakov",
+        "signIn": "Prihlásiť sa",
+        "signingIn": "Prihlasujem sa...",
+        "serverError": "Chyba servera. Skúste to znova."
+    },
+    "adminPanel": {
+        "title": "Admin Panel",
+        "usersTab": "Používatelia",
+        "adminTab": "Admin",
+        "usersSection": "Tu bude zoznam používateľov...",
+        "adminSection": "Tu budú administrátorské nastavenia...",
+        "usersList": "Zoznam používateľov",
+        "totalUsers": "Počet používateľov:",
+        "noUsers": "Zatiaľ žiadni používatelia",
+        "table": {
+            "id": "ID",
+            "username": "Používateľské meno",
+            "email": "Email",
+            "name": "Meno",
+            "role": "Rola",
+            "created": "Vytvorené",
+            "updated": "Upravené",
+            "noEmail": "žiadny email",
+            "noName": "žiadne meno"
+        }
+    }
+}
