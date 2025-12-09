@@ -1,3 +1,5 @@
+"use client";
+
 interface LanguageCardProps {
   code: string;
   name: string;

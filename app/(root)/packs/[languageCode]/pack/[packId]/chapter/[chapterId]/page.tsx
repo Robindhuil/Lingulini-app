@@ -1,8 +1,8 @@
 import { auth } from "@/lib/auth";
 import { getAllChaptersByPack } from "@/app/actions/chapters";
 import { getChapterWithPack, getVocabulariesByChapter } from "@/app/actions/vocabulary";
-import ChapterContent from "@/components/chapter/ChapterContent";
 import { notFound } from "next/navigation";
+import ChapterContent from "@/components/chapter/ChapterContent";
 
 interface ChapterPageProps {
   params: {

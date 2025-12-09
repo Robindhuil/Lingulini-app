@@ -129,7 +129,7 @@ export default function AddVocabularyModal({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                {formData.type === "WORD" ? "Word" : formData.type === "PHRASE" ? "Phrase" : "Sentence"} *
+                {formData.type === "WORD" ? "Word" : formData.type === "PHRASE" ? "Phrase" : "Sentence"} (Slovak) *
               </label>
               <input
                 type="text"
@@ -137,13 +137,13 @@ export default function AddVocabularyModal({
                 value={formData.word}
                 onChange={(e) => setFormData({ ...formData, word: e.target.value })}
                 className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                placeholder={formData.type === "WORD" ? "e.g., Hola" : formData.type === "PHRASE" ? "e.g., Buenos días" : "e.g., ¿Cómo estás?"}
+                placeholder={formData.type === "WORD" ? "e.g., Ahoj" : formData.type === "PHRASE" ? "e.g., Dobré ráno" : "e.g., Ako sa máš?"}
               />
             </div>
 
             <div>
               <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                Translation *
+                Translation (English) *
               </label>
               <input
                 type="text"
@@ -166,7 +166,7 @@ export default function AddVocabularyModal({
               value={formData.pronunciation}
               onChange={(e) => setFormData({ ...formData, pronunciation: e.target.value })}
               className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-              placeholder="e.g., OH-lah"
+              placeholder="e.g., ah-hoy"
             />
           </div>
 

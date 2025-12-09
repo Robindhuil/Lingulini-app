@@ -10,6 +10,7 @@ interface AddCourseModalProps {
 }
 
 const languageOptions = [
+  { code: "sk", name: "Slovak", flag: "🇸🇰" },
   { code: "en", name: "English", flag: "🇬🇧" },
   { code: "es", name: "Spanish", flag: "🇪🇸" },
   { code: "fr", name: "French", flag: "🇫🇷" },

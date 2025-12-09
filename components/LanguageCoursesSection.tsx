@@ -26,8 +26,9 @@ interface LanguageCoursesSectionProps {
 // Map language codes to gradients
 const getGradientForLanguage = (code: string): string => {
   const gradients: Record<string, string> = {
-    en: "from-blue-400 to-blue-600",
-    es: "from-red-400 to-red-600",
+    sk: "from-blue-400 to-blue-600",
+    en: "from-red-400 to-red-600",
+    es: "from-orange-400 to-red-600",
     fr: "from-indigo-400 to-indigo-600",
     de: "from-yellow-400 to-yellow-600",
     it: "from-green-400 to-green-600",
