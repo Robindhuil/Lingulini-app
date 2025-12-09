@@ -7,18 +7,167 @@ datasource db {
 }
 
 model User {
-  id             Int       @id @default(autoincrement())
-  email          String    @unique
-  name           String?
-  hashedpassword String    
-  role           Role      @default(USER)
-  nativeLanguage String?   @default("en")
-  learningLanguages String[] @default([])
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  id                Int                @id @default(autoincrement())
+  email             String             @unique
+  name              String?
+  hashedpassword    String    
+  role              Role               @default(USER)
+  nativeLanguage    String?            @default("en")
+  learningLanguages String[]           @default([])
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  
+  // Relations
+  courseProgress    CourseProgress[]
+  chapterProgress   ChapterProgress[]
+  vocabularyProgress VocabularyProgress[]
 }
 
 enum Role {
   ADMIN
   USER
+}
+
+// Language Course (e.g., "Spanish for English Speakers")
+model Course {
+  id              Int       @id @default(autoincrement())
+  title           String
+  description     String?
+  languageCode    String    // The language being taught (e.g., "es" for Spanish)
+  forSpeakersOf   String    // Native language (e.g., "en" for English speakers)
+  level           Level     @default(BEGINNER)
+  emoji           String?   @default("🌍")
+  isPublished     Boolean   @default(false)
+  order           Int       @default(0)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  
+  // Relations
+  packs           Pack[]
+  courseProgress  CourseProgress[]
+}
+
+enum Level {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+// Language Pack (e.g., "Basic Greetings", "Food & Dining")
+model Pack {
+  id          Int       @id @default(autoincrement())
+  courseId    Int
+  title       String
+  description String?
+  emoji       String?   @default("📦")
+  order       Int       @default(0)
+  isPublished Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  
+  // Relations
+  course      Course    @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  chapters    Chapter[]
+}
+
+// Chapter (e.g., "Lesson 1: Hello & Goodbye", "Lesson 2: Ordering Food")
+model Chapter {
+  id          Int       @id @default(autoincrement())
+  packId      Int
+  title       String
+  description String?
+  order       Int       @default(0)
+  isPublished Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  
+  // Relations
+  pack            Pack                @relation(fields: [packId], references: [id], onDelete: Cascade)
+  vocabularies    Vocabulary[]
+  chapterProgress ChapterProgress[]
+}
+
+// Vocabulary items in a chapter
+model Vocabulary {
+  id            Int       @id @default(autoincrement())
+  chapterId     Int
+  word          String    // Word in target language
+  translation   String    // Translation in native language
+  pronunciation String?   // Phonetic pronunciation
+  audioUrl      String?   // URL to audio file
+  imageUrl      String?   // URL to image
+  example       String?   // Example sentence
+  exampleTranslation String? // Translation of example
+  type          VocabularyType @default(WORD)
+  order         Int       @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  // Relations
+  chapter       Chapter   @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  progress      VocabularyProgress[]
+}
+
+enum VocabularyType {
+  WORD
+  PHRASE
+  SENTENCE
+}
+
+// User progress tracking for courses
+model CourseProgress {
+  id              Int       @id @default(autoincrement())
+  userId          Int
+  courseId        Int
+  isCompleted     Boolean   @default(false)
+  completedAt     DateTime?
+  lastAccessedAt  DateTime  @default(now())
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  
+  // Relations
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course  Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, courseId])
+}
+
+// User progress tracking for chapters
+model ChapterProgress {
+  id              Int       @id @default(autoincrement())
+  userId          Int
+  chapterId       Int
+  isCompleted     Boolean   @default(false)
+  score           Int       @default(0) // Score out of 100
+  completedAt     DateTime?
+  lastAccessedAt  DateTime  @default(now())
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  
+  // Relations
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, chapterId])
+}
+
+// User progress tracking for individual vocabulary
+model VocabularyProgress {
+  id              Int       @id @default(autoincrement())
+  userId          Int
+  vocabularyId    Int
+  mastery         Int       @default(0) // 0-100, how well user knows this word
+  timesReviewed   Int       @default(0)
+  correctCount    Int       @default(0)
+  incorrectCount  Int       @default(0)
+  lastReviewedAt  DateTime?
+  nextReviewAt    DateTime? // For spaced repetition
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  
+  // Relations
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  vocabulary  Vocabulary @relation(fields: [vocabularyId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, vocabularyId])
 }

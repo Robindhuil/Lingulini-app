@@ -1,0 +1,124 @@
+"use client";
+
+import { useState } from "react";
+import AddPackModal from "@/components/AddPackModal";
+import { Plus, Book } from "lucide-react";
+import Link from "next/link";
+
+interface Pack {
+  id: number;
+  courseId: number;
+  title: string;
+  description: string | null;
+  emoji: string | null;
+  order: number;
+  isPublished: boolean;
+  _count: {
+    chapters: number;
+  };
+}
+
+interface PacksSectionProps {
+  packs: Pack[];
+  courseId: number;
+  courseName: string;
+  languageCode: string;
+  isAdmin: boolean;
+}
+
+export default function PacksSection({ 
+  packs, 
+  courseId, 
+  courseName, 
+  languageCode,
+  isAdmin 
+}: PacksSectionProps) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  return (
+    <>
+      <div className="max-w-6xl mx-auto px-4 py-16">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl md:text-5xl font-black mb-4 text-primary">
+            {courseName} Packs 📚
+          </h1>
+          <p className="text-lg text-gray-600 dark:text-gray-400">
+            Choose a pack to start learning
+          </p>
+        </div>
+
+        {/* Packs Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {packs.map((pack) => (
+            <Link
+              key={pack.id}
+              href={`/packs/${languageCode}/pack/${pack.id}`}
+              className="card-playful p-6 hover:scale-105 transition-all cursor-pointer border-2 border-transparent hover:border-primary"
+            >
+              <div className="text-5xl mb-4 text-center">{pack.emoji || "📦"}</div>
+              <h3 className="text-xl font-bold mb-2 text-primary text-center">
+                {pack.title}
+              </h3>
+              {pack.description && (
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 text-center">
+                  {pack.description}
+                </p>
+              )}
+              <div className="flex items-center justify-center gap-2 text-sm text-gray-500 dark:text-gray-500">
+                <Book className="w-4 h-4" />
+                <span>{pack._count.chapters} chapters</span>
+              </div>
+              {!pack.isPublished && isAdmin && (
+                <div className="mt-3 text-center">
+                  <span className="inline-block px-3 py-1 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-400 text-xs rounded-full">
+                    Draft
+                  </span>
+                </div>
+              )}
+            </Link>
+          ))}
+
+          {/* Add Pack Button - Only for Admins */}
+          {isAdmin && (
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="card-playful p-6 border-4 border-dashed border-gray-300 dark:border-gray-600 hover:border-primary hover:bg-gray-50 dark:hover:bg-gray-800 transition-all cursor-pointer"
+            >
+              <div className="text-center">
+                <Plus className="w-16 h-16 mx-auto text-gray-400 mb-4" />
+                <h3 className="text-xl font-bold text-gray-600 dark:text-gray-400">
+                  Add New Pack
+                </h3>
+                <p className="text-sm text-gray-500 dark:text-gray-500 mt-2">
+                  Create a new learning pack
+                </p>
+              </div>
+            </button>
+          )}
+        </div>
+
+        {/* Empty State */}
+        {packs.length === 0 && !isAdmin && (
+          <div className="text-center py-16">
+            <div className="text-6xl mb-4">📦</div>
+            <h3 className="text-2xl font-bold text-gray-600 dark:text-gray-400 mb-2">
+              No packs available yet
+            </h3>
+            <p className="text-gray-500 dark:text-gray-500">
+              Check back soon for new learning content!
+            </p>
+          </div>
+        )}
+      </div>
+
+      {/* Add Pack Modal */}
+      <AddPackModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)}
+        courseId={courseId}
+        courseName={courseName}
+      />
+    </>
+  );
+}
