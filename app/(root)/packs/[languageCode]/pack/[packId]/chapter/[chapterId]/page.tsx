@@ -1,5 +1,5 @@
 import { auth } from "@/lib/auth";
-import { getAllChaptersByPack } from "@/app/actions/chapters";
+import { getAllChaptersByPack, getChaptersByPack } from "@/app/actions/chapters";
 import { getChapterWithPack, getVocabulariesByChapter } from "@/app/actions/vocabulary";
 import { notFound } from "next/navigation";
 import ChapterContent from "@/components/chapter/ChapterContent";
@@ -34,8 +34,10 @@ export default async function ChapterPage({ params }: ChapterPageProps) {
     notFound();
   }
 
-  // Get all chapters for sidebar
-  const chaptersResult = await getAllChaptersByPack(chapter.pack.id);
+  // Get all chapters for sidebar (all for admin, only published for others)
+  const chaptersResult = isAdmin
+    ? await getAllChaptersByPack(chapter.pack.id)
+    : await getChaptersByPack(chapter.pack.id);
   const chapters = chaptersResult.success && chaptersResult.chapters ? chaptersResult.chapters : [];
 
   // Get vocabularies for this chapter

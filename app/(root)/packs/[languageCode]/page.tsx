@@ -1,5 +1,5 @@
 import { auth } from "@/lib/auth";
-import { getCourseByLanguageCode, getAllPacksByCourse } from "@/app/actions/packs";
+import { getCourseByLanguageCode, getAllPacksByCourse, getPacksByCourse } from "@/app/actions/packs";
 import PacksSection from "@/components/PacksSection";
 import { notFound } from "next/navigation";
 
@@ -23,8 +23,11 @@ export default async function PacksPage({ params }: PacksPageProps) {
 
   const course = courseResult.course;
 
-  // Get packs for this course
-  const packsResult = await getAllPacksByCourse(course.id);
+  // Get packs for this course (all for admin, only published for others)
+  const packsResult = isAdmin 
+    ? await getAllPacksByCourse(course.id)
+    : await getPacksByCourse(course.id);
+  
   const packs = packsResult.success && packsResult.packs ? packsResult.packs : [];
 
   return (

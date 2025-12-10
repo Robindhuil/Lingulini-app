@@ -1,5 +1,5 @@
 import { auth } from "@/lib/auth";
-import { getPackWithCourse, getAllChaptersByPack } from "@/app/actions/chapters";
+import { getPackWithCourse, getAllChaptersByPack, getChaptersByPack } from "@/app/actions/chapters";
 import PackContent from "@/components/pack/PackContent";
 import { notFound } from "next/navigation";
 
@@ -29,8 +29,10 @@ export default async function PackPage({ params }: PackPageProps) {
     notFound();
   }
 
-  // Get chapters for this pack
-  const chaptersResult = await getAllChaptersByPack(pack.id);
+  // Get chapters for this pack (all for admin, only published for others)
+  const chaptersResult = isAdmin
+    ? await getAllChaptersByPack(pack.id)
+    : await getChaptersByPack(pack.id);
   const chapters = chaptersResult.success && chaptersResult.chapters ? chaptersResult.chapters : [];
 
   return (
