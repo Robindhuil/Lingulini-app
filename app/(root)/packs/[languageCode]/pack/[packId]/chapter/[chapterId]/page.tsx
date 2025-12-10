@@ -13,7 +13,7 @@ interface ChapterPageProps {
 }
 
 export default async function ChapterPage({ params }: ChapterPageProps) {
-  const { languageCode, packId, chapterId } = params;
+  const { languageCode, packId, chapterId } = await params;
   const session = await auth();
   const isAdmin = session?.user?.role === "ADMIN";
 
