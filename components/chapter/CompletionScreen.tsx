@@ -3,6 +3,11 @@
  * Shown when user finishes all vocabulary in a chapter
  */
 
+"use client";
+
+import { useEffect } from "react";
+import { playCelebrationSound } from "@/utils/celebrationSounds";
+
 interface CompletionScreenProps {
   chapterName: string;
   vocabularyCount: number;
@@ -23,6 +28,11 @@ export default function CompletionScreen({
   onClose,
 }: CompletionScreenProps) {
   const percentage = Math.round((score / maxScore) * 100);
+
+  // Play celebration sound when component mounts
+  useEffect(() => {
+    playCelebrationSound(percentage);
+  }, [percentage]);
   const emoji = percentage >= 90 ? "🎉" : percentage >= 70 ? "👏" : percentage >= 50 ? "👍" : "💪";
 
   return (

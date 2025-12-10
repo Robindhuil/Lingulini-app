@@ -1,12 +1,24 @@
 "use client";
 
-import { useState } from "react";
-import { createCourse } from "@/app/actions/courses";
+import { useState, useEffect } from "react";
+import { createCourse, updateCourse } from "@/app/actions/courses";
 import { X } from "lucide-react";
+
+interface Course {
+  id: number;
+  title: string;
+  description: string | null;
+  languageCode: string;
+  forSpeakersOf: string;
+  level: string;
+  emoji: string | null;
+  isPublished: boolean;
+}
 
 interface AddCourseModalProps {
   isOpen: boolean;
   onClose: () => void;
+  editCourse?: Course | null;
 }
 
 const languageOptions = [
@@ -36,7 +48,7 @@ const gradientOptions = [
   "from-orange-400 to-orange-600",
 ];
 
-export default function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
+export default function AddCourseModal({ isOpen, onClose, editCourse = null }: AddCourseModalProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   
@@ -50,28 +62,45 @@ export default function AddCourseModal({ isOpen, onClose }: AddCourseModalProps)
     isPublished: false,
   });
 
+  // Populate form when editing
+  useEffect(() => {
+    if (editCourse) {
+      setFormData({
+        title: editCourse.title,
+        description: editCourse.description || "",
+        languageCode: editCourse.languageCode,
+        forSpeakersOf: editCourse.forSpeakersOf,
+        level: editCourse.level as "BEGINNER" | "INTERMEDIATE" | "ADVANCED",
+        emoji: editCourse.emoji || "🌍",
+        isPublished: editCourse.isPublished,
+      });
+    } else {
+      setFormData({
+        title: "",
+        description: "",
+        languageCode: "",
+        forSpeakersOf: "en",
+        level: "BEGINNER",
+        emoji: "🌍",
+        isPublished: false,
+      });
+    }
+  }, [editCourse, isOpen]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setLoading(true);
 
     try {
-      const result = await createCourse(formData);
+      const result = editCourse
+        ? await updateCourse(editCourse.id, formData)
+        : await createCourse(formData);
       
       if (result.success) {
-        // Reset form
-        setFormData({
-          title: "",
-          description: "",
-          languageCode: "",
-          forSpeakersOf: "en",
-          level: "BEGINNER",
-          emoji: "🌍",
-          isPublished: false,
-        });
         onClose();
       } else {
-        setError(result.error || "Failed to create course");
+        setError(result.error || `Failed to ${editCourse ? 'update' : 'create'} course`);
       }
     } catch (err) {
       setError("An unexpected error occurred");
@@ -94,7 +123,9 @@ export default function AddCourseModal({ isOpen, onClose }: AddCourseModalProps)
       <div className="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4 flex items-center justify-between">
-          <h2 className="text-2xl font-bold text-primary">Add New Language Course 🎓</h2>
+          <h2 className="text-2xl font-bold text-primary">
+            {editCourse ? "Edit Language Course ✏️" : "Add New Language Course 🎓"}
+          </h2>
           <button
             onClick={onClose}
             className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
@@ -254,7 +285,7 @@ export default function AddCourseModal({ isOpen, onClose }: AddCourseModalProps)
               disabled={loading}
               className="btn-primary px-6 py-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? "Creating..." : "Create Course"}
+              {loading ? (editCourse ? "Updating..." : "Creating...") : (editCourse ? "Update Course" : "Create Course")}
             </button>
           </div>
         </form>

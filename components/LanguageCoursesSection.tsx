@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import LanguageCard from "@/components/LanguageCard";
 import AddCourseModal from "@/components/AddCourseModal";
+import RemoveModal from "@/components/RemoveModal";
+import { deleteCourse } from "@/app/actions/courses";
 import { Plus } from "lucide-react";
 
 interface Course {
@@ -46,12 +48,52 @@ const getGradientForLanguage = (code: string): string => {
 export default function LanguageCoursesSection({ courses, isAdmin }: LanguageCoursesSectionProps) {
   const [selectedLang, setSelectedLang] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingCourse, setEditingCourse] = useState<Course | null>(null);
+  const [isRemoveModalOpen, setIsRemoveModalOpen] = useState(false);
+  const [courseToDelete, setCourseToDelete] = useState<Course | null>(null);
+  const [deleteLoading, setDeleteLoading] = useState(false);
   const router = useRouter();
 
   const handleLanguageSelect = (langCode: string) => {
     setSelectedLang(langCode);
     // Navigate to packs page for this language
     router.push(`/packs/${langCode}`);
+  };
+
+  const handleEditCourse = (course: Course) => {
+    setEditingCourse(course);
+    setIsModalOpen(true);
+  };
+
+  const handleDeleteClick = (course: Course) => {
+    setCourseToDelete(course);
+    setIsRemoveModalOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!courseToDelete) return;
+    
+    setDeleteLoading(true);
+    try {
+      const result = await deleteCourse(courseToDelete.id);
+      if (result.success) {
+        setIsRemoveModalOpen(false);
+        setCourseToDelete(null);
+        router.refresh();
+      } else {
+        alert(result.error || "Failed to delete course");
+      }
+    } catch (error) {
+      alert("An unexpected error occurred");
+    } finally {
+      setDeleteLoading(false);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setEditingCourse(null);
+    router.refresh();
   };
 
   return (
@@ -75,6 +117,9 @@ export default function LanguageCoursesSection({ courses, isAdmin }: LanguageCou
               gradient={getGradientForLanguage(course.languageCode)}
               isSelected={selectedLang === course.languageCode}
               onSelect={handleLanguageSelect}
+              isAdmin={isAdmin}
+              onEdit={() => handleEditCourse(course)}
+              onDelete={() => handleDeleteClick(course)}
             />
           ))}
 
@@ -98,8 +143,28 @@ export default function LanguageCoursesSection({ courses, isAdmin }: LanguageCou
         </div>
       </section>
 
-      {/* Add Course Modal */}
-      <AddCourseModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      {/* Add/Edit Course Modal */}
+      <AddCourseModal 
+        isOpen={isModalOpen} 
+        onClose={handleCloseModal}
+        editCourse={editingCourse}
+      />
+
+      {/* Delete Confirmation Modal */}
+      {courseToDelete && (
+        <RemoveModal
+          isOpen={isRemoveModalOpen}
+          onClose={() => {
+            setIsRemoveModalOpen(false);
+            setCourseToDelete(null);
+          }}
+          onConfirm={handleConfirmDelete}
+          title="Delete Course"
+          description="Are you sure you want to delete this course? This will also delete all associated packs, chapters, and vocabulary."
+          itemName={courseToDelete.title}
+          loading={deleteLoading}
+        />
+      )}
     </>
   );
 }

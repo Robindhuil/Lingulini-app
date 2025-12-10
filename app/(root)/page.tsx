@@ -1,12 +1,12 @@
 import { auth } from "@/lib/auth";
-import { getCourses } from "@/app/actions/courses";
+import { getCourses, getAllCourses } from "@/app/actions/courses";
 import LanguageCoursesSection from "@/components/LanguageCoursesSection";
 
 export default async function HomePage() {
   const session = await auth();
   const isAdmin = session?.user?.role === "ADMIN";
   
-  const result = await getCourses();
+  const result = isAdmin ? await getAllCourses() : await getCourses();
   const courses = result.success && result.courses ? result.courses : [];
 
   return (
