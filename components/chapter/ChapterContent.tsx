@@ -3,8 +3,10 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import AddVocabularyModal from "@/components/AddVocabularyModal";
+import AddChapterModal from "@/components/AddChapterModal";
 import RemoveModal from "@/components/RemoveModal";
 import { deleteVocabulary } from "@/app/actions/vocabulary";
+import { deleteChapter } from "@/app/actions/chapters";
 import LearningSlideShow from "@/components/chapter/LearningSlideShow";
 import Sidebar from "@/components/pack/Sidebar";
 import { Plus, Volume2, Image as ImageIcon, BookOpen, PlayCircle, Pencil, Trash2 } from "lucide-react";
@@ -70,6 +72,14 @@ export default function ChapterContent({
   const [isRemoveModalOpen, setIsRemoveModalOpen] = useState(false);
   const [vocabToDelete, setVocabToDelete] = useState<Vocabulary | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
+  
+  // Chapter editing/deletion state
+  const [isChapterModalOpen, setIsChapterModalOpen] = useState(false);
+  const [editingChapter, setEditingChapter] = useState<Chapter | null>(null);
+  const [isChapterRemoveModalOpen, setIsChapterRemoveModalOpen] = useState(false);
+  const [chapterToDelete, setChapterToDelete] = useState<Chapter | null>(null);
+  const [chapterDeleteLoading, setChapterDeleteLoading] = useState(false);
+  
   const router = useRouter();
 
   const hasVocabularies = vocabularies.length > 0;
@@ -112,6 +122,45 @@ export default function ChapterContent({
     router.refresh();
   };
 
+  // Chapter handlers
+  const handleEditChapter = (chapterToEdit: Chapter) => {
+    setEditingChapter(chapterToEdit);
+    setIsChapterModalOpen(true);
+  };
+
+  const handleDeleteChapter = (chapterToRemove: Chapter) => {
+    setChapterToDelete(chapterToRemove);
+    setIsChapterRemoveModalOpen(true);
+  };
+
+  const handleConfirmChapterDelete = async () => {
+    if (!chapterToDelete) return;
+    
+    setChapterDeleteLoading(true);
+    try {
+      const result = await deleteChapter(chapterToDelete.id);
+      if (result.success) {
+        setIsChapterRemoveModalOpen(false);
+        setChapterToDelete(null);
+        // Navigate to pack page after deleting current chapter
+        router.push(`/packs/${chapter.pack.course.languageCode}/pack/${chapter.pack.id}`);
+        router.refresh();
+      } else {
+        alert(result.error || "Failed to delete chapter");
+      }
+    } catch (error) {
+      alert("An unexpected error occurred");
+    } finally {
+      setChapterDeleteLoading(false);
+    }
+  };
+
+  const handleCloseChapterModal = () => {
+    setIsChapterModalOpen(false);
+    setEditingChapter(null);
+    router.refresh();
+  };
+
   return (
     <>
       {/* Sidebar */}
@@ -121,7 +170,9 @@ export default function ChapterContent({
         packId={chapter.pack.id}
         languageCode={chapter.pack.course.languageCode}
         isAdmin={isAdmin}
-        onAddChapter={() => {}}
+        onAddChapter={() => setIsChapterModalOpen(true)}
+        onEditChapter={handleEditChapter}
+        onDeleteChapter={handleDeleteChapter}
       />
 
       {/* Main Content */}
@@ -365,6 +416,31 @@ export default function ChapterContent({
           description="Are you sure you want to delete this vocabulary item?"
           itemName={`${vocabToDelete.word} - ${vocabToDelete.translation}`}
           loading={deleteLoading}
+        />
+      )}
+
+      {/* Add/Edit Chapter Modal */}
+      <AddChapterModal
+        isOpen={isChapterModalOpen}
+        onClose={handleCloseChapterModal}
+        packId={chapter.pack.id}
+        packName={chapter.pack.title}
+        editChapter={editingChapter}
+      />
+
+      {/* Delete Chapter Confirmation Modal */}
+      {chapterToDelete && (
+        <RemoveModal
+          isOpen={isChapterRemoveModalOpen}
+          onClose={() => {
+            setIsChapterRemoveModalOpen(false);
+            setChapterToDelete(null);
+          }}
+          onConfirm={handleConfirmChapterDelete}
+          title="Delete Chapter"
+          description="Are you sure you want to delete this chapter? This will also delete all associated vocabulary words."
+          itemName={chapterToDelete.title}
+          loading={chapterDeleteLoading}
         />
       )}
 
