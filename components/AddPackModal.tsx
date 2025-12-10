@@ -1,17 +1,28 @@
 "use client";
 
-import { useState } from "react";
-import { createPack } from "@/app/actions/packs";
+import { useState, useEffect } from "react";
+import { createPack, updatePack } from "@/app/actions/packs";
 import { X } from "lucide-react";
+
+interface Pack {
+  id: number;
+  courseId: number;
+  title: string;
+  description: string | null;
+  emoji: string | null;
+  order: number;
+  isPublished: boolean;
+}
 
 interface AddPackModalProps {
   isOpen: boolean;
   onClose: () => void;
   courseId: number;
   courseName: string;
+  editPack?: Pack | null;
 }
 
-export default function AddPackModal({ isOpen, onClose, courseId, courseName }: AddPackModalProps) {
+export default function AddPackModal({ isOpen, onClose, courseId, courseName, editPack = null }: AddPackModalProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   
@@ -22,28 +33,42 @@ export default function AddPackModal({ isOpen, onClose, courseId, courseName }: 
     isPublished: false,
   });
 
+  // Populate form when editing
+  useEffect(() => {
+    if (editPack) {
+      setFormData({
+        title: editPack.title,
+        description: editPack.description || "",
+        emoji: editPack.emoji || "📦",
+        isPublished: editPack.isPublished,
+      });
+    } else {
+      setFormData({
+        title: "",
+        description: "",
+        emoji: "📦",
+        isPublished: false,
+      });
+    }
+  }, [editPack, isOpen]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setLoading(true);
 
     try {
-      const result = await createPack({
-        courseId,
-        ...formData,
-      });
+      const result = editPack
+        ? await updatePack(editPack.id, formData)
+        : await createPack({
+            courseId,
+            ...formData,
+          });
       
       if (result.success) {
-        // Reset form
-        setFormData({
-          title: "",
-          description: "",
-          emoji: "📦",
-          isPublished: false,
-        });
         onClose();
       } else {
-        setError(result.error || "Failed to create pack");
+        setError(result.error || `Failed to ${editPack ? 'update' : 'create'} pack`);
       }
     } catch (err) {
       setError("An unexpected error occurred");
@@ -67,7 +92,9 @@ export default function AddPackModal({ isOpen, onClose, courseId, courseName }: 
         {/* Header */}
         <div className="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4 flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-bold text-primary">Add New Pack 📦</h2>
+            <h2 className="text-2xl font-bold text-primary">
+              {editPack ? "Edit Pack ✏️" : "Add New Pack 📦"}
+            </h2>
             <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
               for {courseName}
             </p>
@@ -173,7 +200,7 @@ export default function AddPackModal({ isOpen, onClose, courseId, courseName }: 
               disabled={loading}
               className="btn-primary px-6 py-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? "Creating..." : "Create Pack"}
+              {loading ? (editPack ? "Updating..." : "Creating...") : (editPack ? "Update Pack" : "Create Pack")}
             </button>
           </div>
         </form>
