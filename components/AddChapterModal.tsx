@@ -1,17 +1,27 @@
 "use client";
 
-import { useState } from "react";
-import { createChapter } from "@/app/actions/chapters";
+import { useState, useEffect } from "react";
+import { createChapter, updateChapter } from "@/app/actions/chapters";
 import { X } from "lucide-react";
+
+interface Chapter {
+  id: number;
+  packId: number;
+  title: string;
+  description: string | null;
+  order: number;
+  isPublished: boolean;
+}
 
 interface AddChapterModalProps {
   isOpen: boolean;
   onClose: () => void;
   packId: number;
   packName: string;
+  editChapter?: Chapter | null;
 }
 
-export default function AddChapterModal({ isOpen, onClose, packId, packName }: AddChapterModalProps) {
+export default function AddChapterModal({ isOpen, onClose, packId, packName, editChapter = null }: AddChapterModalProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   
@@ -21,27 +31,40 @@ export default function AddChapterModal({ isOpen, onClose, packId, packName }: A
     isPublished: false,
   });
 
+  // Populate form when editing
+  useEffect(() => {
+    if (editChapter) {
+      setFormData({
+        title: editChapter.title,
+        description: editChapter.description || "",
+        isPublished: editChapter.isPublished,
+      });
+    } else {
+      setFormData({
+        title: "",
+        description: "",
+        isPublished: false,
+      });
+    }
+  }, [editChapter, isOpen]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setLoading(true);
 
     try {
-      const result = await createChapter({
-        packId,
-        ...formData,
-      });
+      const result = editChapter
+        ? await updateChapter(editChapter.id, formData)
+        : await createChapter({
+            packId,
+            ...formData,
+          });
       
       if (result.success) {
-        // Reset form
-        setFormData({
-          title: "",
-          description: "",
-          isPublished: false,
-        });
         onClose();
       } else {
-        setError(result.error || "Failed to create chapter");
+        setError(result.error || `Failed to ${editChapter ? 'update' : 'create'} chapter`);
       }
     } catch (err) {
       setError("An unexpected error occurred");
@@ -65,7 +88,9 @@ export default function AddChapterModal({ isOpen, onClose, packId, packName }: A
         {/* Header */}
         <div className="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4 flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-bold text-primary">Add New Chapter 📖</h2>
+            <h2 className="text-2xl font-bold text-primary">
+              {editChapter ? "Edit Chapter ✏️" : "Add New Chapter 📖"}
+            </h2>
             <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
               for {packName}
             </p>
@@ -143,7 +168,7 @@ export default function AddChapterModal({ isOpen, onClose, packId, packName }: A
               disabled={loading}
               className="btn-primary px-6 py-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? "Creating..." : "Create Chapter"}
+              {loading ? (editChapter ? "Updating..." : "Creating...") : (editChapter ? "Update Chapter" : "Create Chapter")}
             </button>
           </div>
         </form>

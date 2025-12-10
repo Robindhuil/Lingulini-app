@@ -1,11 +1,15 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import AddChapterModal from "@/components/AddChapterModal";
+import RemoveModal from "@/components/RemoveModal";
+import { deleteChapter } from "@/app/actions/chapters";
 import Sidebar from "@/components/pack/Sidebar";
 
 interface Chapter {
   id: number;
+  packId: number;
   title: string;
   description: string | null;
   order: number;
@@ -33,6 +37,47 @@ interface PackContentProps {
 
 export default function PackContent({ pack, chapters, isAdmin, currentChapterId }: PackContentProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingChapter, setEditingChapter] = useState<Chapter | null>(null);
+  const [isRemoveModalOpen, setIsRemoveModalOpen] = useState(false);
+  const [chapterToDelete, setChapterToDelete] = useState<Chapter | null>(null);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const router = useRouter();
+
+  const handleEditChapter = (chapter: Chapter) => {
+    setEditingChapter(chapter);
+    setIsModalOpen(true);
+  };
+
+  const handleDeleteClick = (chapter: Chapter) => {
+    setChapterToDelete(chapter);
+    setIsRemoveModalOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!chapterToDelete) return;
+    
+    setDeleteLoading(true);
+    try {
+      const result = await deleteChapter(chapterToDelete.id);
+      if (result.success) {
+        setIsRemoveModalOpen(false);
+        setChapterToDelete(null);
+        router.refresh();
+      } else {
+        alert(result.error || "Failed to delete chapter");
+      }
+    } catch (error) {
+      alert("An unexpected error occurred");
+    } finally {
+      setDeleteLoading(false);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setEditingChapter(null);
+    router.refresh();
+  };
 
   return (
     <>
@@ -44,6 +89,8 @@ export default function PackContent({ pack, chapters, isAdmin, currentChapterId 
         languageCode={pack.course.languageCode}
         isAdmin={isAdmin}
         onAddChapter={() => setIsModalOpen(true)}
+        onEditChapter={handleEditChapter}
+        onDeleteChapter={handleDeleteClick}
       />
 
       {/* Main Content */}
@@ -110,13 +157,30 @@ export default function PackContent({ pack, chapters, isAdmin, currentChapterId 
         </div>
       </div>
 
-      {/* Add Chapter Modal */}
+      {/* Add/Edit Chapter Modal */}
       <AddChapterModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={handleCloseModal}
         packId={pack.id}
         packName={pack.title}
+        editChapter={editingChapter}
       />
+
+      {/* Delete Confirmation Modal */}
+      {chapterToDelete && (
+        <RemoveModal
+          isOpen={isRemoveModalOpen}
+          onClose={() => {
+            setIsRemoveModalOpen(false);
+            setChapterToDelete(null);
+          }}
+          onConfirm={handleConfirmDelete}
+          title="Delete Chapter"
+          description="Are you sure you want to delete this chapter? This will also delete all associated vocabulary words."
+          itemName={chapterToDelete.title}
+          loading={deleteLoading}
+        />
+      )}
     </>
   );
 }

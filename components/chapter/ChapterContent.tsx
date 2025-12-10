@@ -21,6 +21,7 @@ interface Vocabulary {
 
 interface Chapter {
   id: number;
+  packId: number;
   title: string;
   description: string | null;
   order: number;

@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronLeft, ChevronRight, Plus } from "lucide-react";
+import { ChevronLeft, ChevronRight, Plus, Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
 
 interface Chapter {
   id: number;
+  packId: number;
   title: string;
   description: string | null;
   order: number;
@@ -22,6 +23,8 @@ interface SidebarProps {
   languageCode: string;
   isAdmin: boolean;
   onAddChapter: () => void;
+  onEditChapter?: (chapter: Chapter) => void;
+  onDeleteChapter?: (chapter: Chapter) => void;
 }
 
 export default function Sidebar({ 
@@ -30,7 +33,9 @@ export default function Sidebar({
   packId, 
   languageCode,
   isAdmin,
-  onAddChapter 
+  onAddChapter,
+  onEditChapter,
+  onDeleteChapter
 }: SidebarProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -68,36 +73,63 @@ export default function Sidebar({
           const isActive = currentChapterId === chapter.id;
           
           return (
-            <Link
-              key={chapter.id}
-              href={`/packs/${languageCode}/pack/${packId}/chapter/${chapter.id}`}
-              className={`block p-3 rounded-lg transition-all ${
-                isActive
-                  ? "bg-primary text-white shadow-md"
-                  : "bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-600"
-              }`}
-            >
-              <div className="flex items-start gap-3">
-                <span className={`shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
-                  isActive ? "bg-white text-primary" : "bg-primary text-white"
-                }`}>
-                  {index + 1}
-                </span>
-                <div className="flex-1 min-w-0">
-                  <h4 className="font-semibold text-sm mb-1 truncate">
-                    {chapter.title}
-                  </h4>
-                  <p className="text-xs opacity-80">
-                    {chapter._count.vocabularies} words
-                  </p>
-                  {!chapter.isPublished && isAdmin && (
-                    <span className="inline-block mt-1 px-2 py-0.5 bg-yellow-500 text-white text-xs rounded">
-                      Draft
-                    </span>
-                  )}
+            <div key={chapter.id} className="relative group">
+              <Link
+                href={`/packs/${languageCode}/pack/${packId}/chapter/${chapter.id}`}
+                className={`block p-3 rounded-lg transition-all ${
+                  isActive
+                    ? "bg-primary text-white shadow-md"
+                    : "bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-600"
+                }`}
+              >
+                <div className="flex items-start gap-3">
+                  <span className={`shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
+                    isActive ? "bg-white text-primary" : "bg-primary text-white"
+                  }`}>
+                    {index + 1}
+                  </span>
+                  <div className="flex-1 min-w-0">
+                    <h4 className="font-semibold text-sm mb-1 truncate">
+                      {chapter.title}
+                    </h4>
+                    <p className="text-xs opacity-80">
+                      {chapter._count.vocabularies} words
+                    </p>
+                    {!chapter.isPublished && isAdmin && (
+                      <span className="inline-block mt-1 px-2 py-0.5 bg-yellow-500 text-white text-xs rounded">
+                        Draft
+                      </span>
+                    )}
+                  </div>
                 </div>
-              </div>
-            </Link>
+              </Link>
+
+              {/* Admin Actions */}
+              {isAdmin && (
+                <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      onEditChapter?.(chapter);
+                    }}
+                    className="p-1.5 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors shadow-lg"
+                    title="Edit chapter"
+                  >
+                    <Pencil className="w-3 h-3" />
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      onDeleteChapter?.(chapter);
+                    }}
+                    className="p-1.5 bg-red-600 text-white rounded hover:bg-red-700 transition-colors shadow-lg"
+                    title="Delete chapter"
+                  >
+                    <Trash2 className="w-3 h-3" />
+                  </button>
+                </div>
+              )}
+            </div>
           );
         })}
 
