@@ -1,21 +1,37 @@
 "use client";
 
-import { useState } from "react";
-import { createVocabulary } from "@/app/actions/vocabulary";
+import { useState, useEffect } from "react";
+import { createVocabulary, updateVocabulary } from "@/app/actions/vocabulary";
 import { X } from "lucide-react";
+
+interface Vocabulary {
+  id: number;
+  chapterId: number;
+  word: string;
+  translation: string;
+  pronunciation: string | null;
+  example: string | null;
+  exampleTranslation: string | null;
+  type: string;
+  audioUrl: string | null;
+  imageUrl: string | null;
+  order: number;
+}
 
 interface AddVocabularyModalProps {
   isOpen: boolean;
   onClose: () => void;
   chapterId: number;
   chapterName: string;
+  editVocabulary?: Vocabulary | null;
 }
 
 export default function AddVocabularyModal({ 
   isOpen, 
   onClose, 
   chapterId, 
-  chapterName 
+  chapterName,
+  editVocabulary = null
 }: AddVocabularyModalProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -31,32 +47,50 @@ export default function AddVocabularyModal({
     imageUrl: "",
   });
 
+  // Populate form when editing
+  useEffect(() => {
+    if (editVocabulary) {
+      setFormData({
+        word: editVocabulary.word,
+        translation: editVocabulary.translation,
+        pronunciation: editVocabulary.pronunciation || "",
+        example: editVocabulary.example || "",
+        exampleTranslation: editVocabulary.exampleTranslation || "",
+        type: editVocabulary.type as "WORD" | "PHRASE" | "SENTENCE",
+        audioUrl: editVocabulary.audioUrl || "",
+        imageUrl: editVocabulary.imageUrl || "",
+      });
+    } else {
+      setFormData({
+        word: "",
+        translation: "",
+        pronunciation: "",
+        example: "",
+        exampleTranslation: "",
+        type: "WORD",
+        audioUrl: "",
+        imageUrl: "",
+      });
+    }
+  }, [editVocabulary, isOpen]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setLoading(true);
 
     try {
-      const result = await createVocabulary({
-        chapterId,
-        ...formData,
-      });
+      const result = editVocabulary
+        ? await updateVocabulary(editVocabulary.id, formData)
+        : await createVocabulary({
+            chapterId,
+            ...formData,
+          });
       
       if (result.success) {
-        // Reset form
-        setFormData({
-          word: "",
-          translation: "",
-          pronunciation: "",
-          example: "",
-          exampleTranslation: "",
-          type: "WORD",
-          audioUrl: "",
-          imageUrl: "",
-        });
         onClose();
       } else {
-        setError(result.error || "Failed to create vocabulary");
+        setError(result.error || `Failed to ${editVocabulary ? 'update' : 'create'} vocabulary`);
       }
     } catch (err) {
       setError("An unexpected error occurred");
@@ -80,7 +114,9 @@ export default function AddVocabularyModal({
         {/* Header */}
         <div className="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4 flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-bold text-primary">Add New Vocabulary 📝</h2>
+            <h2 className="text-2xl font-bold text-primary">
+              {editVocabulary ? "Edit Vocabulary ✏️" : "Add New Vocabulary 📝"}
+            </h2>
             <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
               for {chapterName}
             </p>
@@ -242,7 +278,7 @@ export default function AddVocabularyModal({
               disabled={loading}
               className="btn-primary px-6 py-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? "Adding..." : "Add Vocabulary"}
+              {loading ? (editVocabulary ? "Updating..." : "Adding...") : (editVocabulary ? "Update Vocabulary" : "Add Vocabulary")}
             </button>
           </div>
         </form>

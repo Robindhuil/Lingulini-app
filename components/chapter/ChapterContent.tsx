@@ -1,13 +1,17 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import AddVocabularyModal from "@/components/AddVocabularyModal";
+import RemoveModal from "@/components/RemoveModal";
+import { deleteVocabulary } from "@/app/actions/vocabulary";
 import LearningSlideShow from "@/components/chapter/LearningSlideShow";
 import Sidebar from "@/components/pack/Sidebar";
-import { Plus, Volume2, Image as ImageIcon, BookOpen, PlayCircle } from "lucide-react";
+import { Plus, Volume2, Image as ImageIcon, BookOpen, PlayCircle, Pencil, Trash2 } from "lucide-react";
 
 interface Vocabulary {
   id: number;
+  chapterId: number;
   word: string;
   translation: string;
   pronunciation: string | null;
@@ -60,10 +64,53 @@ export default function ChapterContent({
   isAdmin 
 }: ChapterContentProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingVocab, setEditingVocab] = useState<Vocabulary | null>(null);
   const [selectedVocab, setSelectedVocab] = useState<Vocabulary | null>(null);
   const [isLearningMode, setIsLearningMode] = useState(false);
+  const [isRemoveModalOpen, setIsRemoveModalOpen] = useState(false);
+  const [vocabToDelete, setVocabToDelete] = useState<Vocabulary | null>(null);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const router = useRouter();
 
   const hasVocabularies = vocabularies.length > 0;
+
+  const handleEditVocab = (vocab: Vocabulary, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setEditingVocab(vocab);
+    setIsModalOpen(true);
+  };
+
+  const handleDeleteClick = (vocab: Vocabulary, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setVocabToDelete(vocab);
+    setIsRemoveModalOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!vocabToDelete) return;
+    
+    setDeleteLoading(true);
+    try {
+      const result = await deleteVocabulary(vocabToDelete.id);
+      if (result.success) {
+        setIsRemoveModalOpen(false);
+        setVocabToDelete(null);
+        router.refresh();
+      } else {
+        alert(result.error || "Failed to delete vocabulary");
+      }
+    } catch (error) {
+      alert("An unexpected error occurred");
+    } finally {
+      setDeleteLoading(false);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setEditingVocab(null);
+    router.refresh();
+  };
 
   return (
     <>
@@ -124,7 +171,7 @@ export default function ChapterContent({
               {vocabularies.map((vocab, index) => (
                 <div
                   key={vocab.id}
-                  className="card-playful p-6 hover:shadow-lg transition-all cursor-pointer"
+                  className="relative group card-playful p-6 hover:shadow-lg transition-all cursor-pointer"
                   onClick={() => setSelectedVocab(selectedVocab?.id === vocab.id ? null : vocab)}
                 >
                   <div className="flex items-start gap-4">
@@ -211,15 +258,31 @@ export default function ChapterContent({
                             </div>
                           )}
                         </div>
-                      )}
+                      )}  
                     </div>
+                  </div>
+
+                  {/* Admin Actions */}
+                  <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button
+                      onClick={(e) => handleEditVocab(vocab, e)}
+                      className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-lg"
+                      title="Edit vocabulary"
+                    >
+                      <Pencil className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={(e) => handleDeleteClick(vocab, e)}
+                      className="p-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors shadow-lg"
+                      title="Delete vocabulary"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
                   </div>
                 </div>
               ))}
             </div>
-          )}
-
-          {/* Empty State */}
+          )}          {/* Empty State */}
           {vocabularies.length === 0 && (
             <div className="card-playful p-12 text-center">
               <div className="text-6xl mb-4">📚</div>
@@ -280,13 +343,30 @@ export default function ChapterContent({
         </div>
       </div>
 
-      {/* Add Vocabulary Modal */}
+      {/* Add/Edit Vocabulary Modal */}
       <AddVocabularyModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={handleCloseModal}
         chapterId={chapter.id}
         chapterName={chapter.title}
+        editVocabulary={editingVocab}
       />
+
+      {/* Delete Confirmation Modal */}
+      {vocabToDelete && (
+        <RemoveModal
+          isOpen={isRemoveModalOpen}
+          onClose={() => {
+            setIsRemoveModalOpen(false);
+            setVocabToDelete(null);
+          }}
+          onConfirm={handleConfirmDelete}
+          title="Delete Vocabulary"
+          description="Are you sure you want to delete this vocabulary item?"
+          itemName={`${vocabToDelete.word} - ${vocabToDelete.translation}`}
+          loading={deleteLoading}
+        />
+      )}
 
       {/* Learning SlideShow */}
       {isLearningMode && hasVocabularies && (
