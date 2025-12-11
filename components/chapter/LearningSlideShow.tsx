@@ -113,7 +113,7 @@ export default function LearningSlideShow({
 
   // Auto-speak when vocabulary changes
   useEffect(() => {
-    if (currentVocab && !showTranslation) {
+    if (currentVocab && !showTranslation && !completed) {
       const timer = setTimeout(() => {
         handleSpeak(currentVocab.word);
         // Auto-reveal translation after speech
@@ -123,7 +123,7 @@ export default function LearningSlideShow({
       }, 500);
       return () => clearTimeout(timer);
     }
-  }, [currentVocab, showTranslation, handleSpeak]);
+  }, [currentVocab, showTranslation, completed, handleSpeak]);
 
   const handleNext = () => {
     setShowTranslation(false);

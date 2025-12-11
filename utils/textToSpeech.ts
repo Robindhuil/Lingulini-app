@@ -128,13 +128,19 @@ export const speak = async (
         audioRef.current = audio;
       }
       
-      audio.onended = () => onEnd?.();
-      audio.onerror = () => {
-        console.error("Audio playback error");
-        onError?.(new Error("Audio playback failed"));
+      audio.onended = () => {
+        console.log(`✅ Audio playback completed`);
+        onEnd?.();
       };
       
-      console.log(`✅ Playing server-generated speech`);
+      audio.onerror = (event) => {
+        console.error("Audio playback error:", event);
+        console.error("Audio source length:", result.audio.length);
+        console.error("Audio MIME type:", result.mimeType);
+        onError?.(new Error("Audio playback failed - check browser console for details"));
+      };
+      
+      console.log(`✅ Playing server-generated speech (${result.audio.length} bytes)`);
       await audio.play();
     } else {
       console.error("Failed to generate speech:", result.error);

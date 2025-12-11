@@ -1,56 +1,62 @@
 "use server";
 
-import { exec } from "child_process";
-import { promisify } from "util";
-import { unlink, readFile } from "fs/promises";
-import { join } from "path";
-import { randomBytes } from "crypto";
-
-const execAsync = promisify(exec);
-
-// Map language codes to best TLD for voice variety
-// Different TLDs (com, co.uk, com.au, etc.) sometimes have different voice variants
-const getTLD = (languageCode: string): string => {
-  const tldMap: Record<string, string> = {
-    sk: "com", // Slovak - use .com (standard Google voice)
-    en: "com", // English - US voice
-    es: "es", // Spanish - Spain accent
-    de: "de", // German - Germany accent
-    fr: "fr", // French - France accent
-    it: "it", // Italian - Italy accent
-    pt: "pt", // Portuguese - Portugal accent
-    ru: "com", // Russian
+// Map language codes to Google Translate TTS language codes
+const getGoogleTTSLang = (languageCode: string): string => {
+  const langMap: Record<string, string> = {
+    sk: "sk", // Slovak
+    en: "en", // English
+    es: "es", // Spanish
+    de: "de", // German
+    fr: "fr", // French
+    it: "it", // Italian
+    pt: "pt", // Portuguese
+    ru: "ru", // Russian
     pl: "pl", // Polish
-    cs: "cz", // Czech
+    cs: "cs", // Czech
     nl: "nl", // Dutch
+    ja: "ja", // Japanese
+    zh: "zh-CN", // Chinese
+    ko: "ko", // Korean
   };
-  return tldMap[languageCode] || "com";
+  return langMap[languageCode] || languageCode;
 };
 
+/**
+ * Generate speech using Google Translate's TTS service
+ * This is a free, serverless-friendly alternative that works on Vercel
+ */
 export async function generateSpeech(text: string, languageCode: string) {
   try {
-    const filename = `tts-${randomBytes(16).toString("hex")}.mp3`;
-    const filepath = join("/tmp", filename);
-    const tld = getTLD(languageCode);
-
-    // Use gTTS with specific TLD for accent variation
-    // Remove --slow for more natural, conversational speed
-    const command = `gtts-cli "${text.replace(/"/g, '\\"')}" --lang ${languageCode} --tld ${tld} --output "${filepath}"`;
+    // Limit text length to avoid issues
+    const maxLength = 200;
+    const truncatedText = text.length > maxLength ? text.substring(0, maxLength) : text;
     
-    await execAsync(command, { timeout: 10000 });
+    const lang = getGoogleTTSLang(languageCode);
+    
+    // Use Google Translate's public TTS API
+    // This is a documented feature of Google Translate that's widely used
+    const url = `https://translate.google.com/translate_tts?ie=UTF-8&tl=${lang}&client=tw-ob&q=${encodeURIComponent(truncatedText)}`;
+    
+    const response = await fetch(url, {
+      headers: {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+      },
+    });
 
-    const audioBuffer = await readFile(filepath);
-    const base64Audio = audioBuffer.toString("base64");
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
 
-    await unlink(filepath);
+    const arrayBuffer = await response.arrayBuffer();
+    const base64Audio = Buffer.from(arrayBuffer).toString("base64");
 
     return {
       success: true,
       audio: base64Audio,
-      mimeType: "audio/mp3",
+      mimeType: "audio/mpeg",
     };
   } catch (error) {
-    console.error("gTTS error:", error);
+    console.error("TTS error:", error);
     return {
       success: false,
       error: error instanceof Error ? error.message : "Unknown error",
