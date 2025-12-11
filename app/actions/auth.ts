@@ -14,7 +14,7 @@ export async function signInAction(formData: FormData) {
         }
 
         return { success: true }; // Indicate successful login
-    } catch (error) {
+    } catch {
         return { error: "Server error occurred" };
     }
 }

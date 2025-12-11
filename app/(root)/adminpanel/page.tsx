@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import AdminHeader from "@/components/adminpanel/AdminHeader";
 import UsersSection from "@/components/adminpanel/UsersSection";
 import AdminSection from "@/components/adminpanel/AdminSection";

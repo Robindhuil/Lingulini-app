@@ -16,7 +16,7 @@ export default function LoginPage() {
         });
     };
 
-    const LoginFormAny = LoginForm as any;
+    const LoginFormAny = LoginForm as React.ComponentType<{ signInAction: typeof signInAction }>;
 
     return <LoginFormAny signInAction={signInAction} />;
 }
