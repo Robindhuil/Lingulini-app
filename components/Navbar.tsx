@@ -11,7 +11,6 @@ import { isAdmin } from "@/utils/auth";
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
-    const { t } = useTranslation();
     const { theme, toggleTheme } = useTheme();
     const router = useRouter();
     const { data: session } = useSession();

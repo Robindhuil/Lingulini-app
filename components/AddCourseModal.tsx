@@ -37,17 +37,6 @@ const languageOptions = [
   { code: "hi", name: "Hindi", flag: "🇮🇳" },
 ];
 
-const gradientOptions = [
-  "from-blue-400 to-blue-600",
-  "from-red-400 to-red-600",
-  "from-green-400 to-green-600",
-  "from-yellow-400 to-yellow-600",
-  "from-purple-400 to-purple-600",
-  "from-pink-400 to-pink-600",
-  "from-indigo-400 to-indigo-600",
-  "from-orange-400 to-orange-600",
-];
-
 export default function AddCourseModal({ isOpen, onClose, editCourse = null }: AddCourseModalProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -102,7 +91,7 @@ export default function AddCourseModal({ isOpen, onClose, editCourse = null }: A
       } else {
         setError(result.error || `Failed to ${editCourse ? 'update' : 'create'} course`);
       }
-    } catch (err) {
+    } catch (_err) {
       setError("An unexpected error occurred");
     } finally {
       setLoading(false);
@@ -231,7 +220,7 @@ export default function AddCourseModal({ isOpen, onClose, editCourse = null }: A
                     name="level"
                     value={level}
                     checked={formData.level === level}
-                    onChange={(e) => setFormData({ ...formData, level: e.target.value as any })}
+                    onChange={(e) => setFormData({ ...formData, level: e.target.value as "BEGINNER" | "INTERMEDIATE" | "ADVANCED" })}
                     className="mr-2"
                   />
                   <span className="text-sm text-gray-700 dark:text-gray-300">

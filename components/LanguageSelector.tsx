@@ -13,11 +13,7 @@ const languages = [
 export default function LanguageSelector() {
     const { locale, setLocale } = useTranslation();
     const [isOpen, setIsOpen] = useState(false);
-    const [selected, setSelected] = useState(languages.find((l) => l.locale === locale) ?? languages[0]);
-
-    useEffect(() => {
-        setSelected(languages.find((l) => l.locale === locale) ?? languages[0]);
-    }, [locale]);
+    const selected = languages.find((l) => l.locale === locale) ?? languages[0];
 
     return (
         <div className="relative">
@@ -39,7 +35,7 @@ export default function LanguageSelector() {
                         <button
                             key={lang.locale}
                             onClick={() => {
-                                setLocale(lang.locale as any);
+                                setLocale(lang.locale as "sk" | "en" | "de" | "nl");
                                 setIsOpen(false);
                             }}
                             className="flex items-center space-x-3 w-full px-4 py-2 text-left text-gray-800 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors duration-200"

@@ -108,7 +108,7 @@ export default function Footer() {
                 {/* Fun Element */}
                 <div className="mt-8 text-center">
                     <p className="text-xs text-muted italic">
-                        🎨 "The limits of my language are the limits of my world" - Ludwig Wittgenstein
+                        🎨 &ldquo;The limits of my language are the limits of my world&rdquo; - Ludwig Wittgenstein
                     </p>
                 </div>
             </div>

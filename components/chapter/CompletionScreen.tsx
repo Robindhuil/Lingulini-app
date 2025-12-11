@@ -54,7 +54,7 @@ export default function CompletionScreen({
         </div>
 
         <p className="text-lg text-gray-600 dark:text-gray-400 mb-4">
-          You've completed all {vocabularyCount} vocabulary items in {chapterName}
+          You&apos;ve completed all {vocabularyCount} vocabulary items in {chapterName}
         </p>
         
         {/* Missed Words Info */}

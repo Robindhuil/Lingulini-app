@@ -4,13 +4,13 @@ import PacksSection from "@/components/PacksSection";
 import { notFound } from "next/navigation";
 
 interface PacksPageProps {
-  params: {
+  params: Promise<{
     languageCode: string;
-  };
+  }>;
 }
 
 export default async function PacksPage({ params }: PacksPageProps) {
-  const { languageCode } = params;
+  const { languageCode } = await params;
   const session = await auth();
   const isAdmin = session?.user?.role === "ADMIN";
 

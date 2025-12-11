@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
 
 export default function LoginForm() {
-    const { t } = useTranslation();
+    const { t: _t } = useTranslation();
     const router = useRouter();
 
     const [email, setEmail] = useState("");
@@ -15,7 +15,7 @@ export default function LoginForm() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
 
-    const { data: session, status } = useSession();
+    const { data: _session, status } = useSession();
 
     useEffect(() => {
         if (status === "authenticated") {
@@ -89,7 +89,7 @@ export default function LoginForm() {
                     {/* Error Message */}
                     {error && (
                         <div className="mb-6 p-4 bg-error/10 border-2 border-error rounded-2xl flex items-start space-x-3">
-                            <AlertCircle className="text-error flex-shrink-0 mt-0.5" size={20} />
+                            <AlertCircle className="text-error shrink-0 mt-0.5" size={20} />
                             <p className="text-sm text-error font-semibold">{error}</p>
                         </div>
                     )}
@@ -165,7 +165,7 @@ export default function LoginForm() {
                     {/* Footer */}
                     <div className="mt-6 text-center">
                         <p className="text-sm text-muted">
-                            Don't have an account?{" "}
+                            Don&apos;t have an account?{" "}
                             <button className="text-primary font-bold hover:text-secondary transition-colors">
                                 Sign Up Free
                             </button>

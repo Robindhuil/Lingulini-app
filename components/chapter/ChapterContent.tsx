@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import AddVocabularyModal from "@/components/AddVocabularyModal";
 import AddChapterModal from "@/components/AddChapterModal";
 import RemoveModal from "@/components/RemoveModal";
@@ -109,7 +110,7 @@ export default function ChapterContent({
       } else {
         alert(result.error || "Failed to delete vocabulary");
       }
-    } catch (error) {
+    } catch (_error) {
       alert("An unexpected error occurred");
     } finally {
       setDeleteLoading(false);
@@ -148,7 +149,7 @@ export default function ChapterContent({
       } else {
         alert(result.error || "Failed to delete chapter");
       }
-    } catch (error) {
+    } catch (_error) {
       alert("An unexpected error occurred");
     } finally {
       setChapterDeleteLoading(false);
@@ -283,11 +284,13 @@ export default function ChapterContent({
                       {selectedVocab?.id === vocab.id && (vocab.example || vocab.imageUrl) && (
                         <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
                           {vocab.imageUrl && (
-                            <div className="mb-4">
-                              <img 
+                            <div className="mb-4 relative w-full max-w-md mx-auto">
+                              <Image 
                                 src={vocab.imageUrl} 
                                 alt={vocab.word}
-                                className="w-full max-w-md mx-auto rounded-lg shadow-md"
+                                width={448}
+                                height={300}
+                                className="rounded-lg shadow-md"
                               />
                             </div>
                           )}

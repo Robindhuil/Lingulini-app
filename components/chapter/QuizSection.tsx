@@ -36,7 +36,7 @@ export default function QuizSection({
         <div className="mb-6 space-y-4">
           <div className="text-center">
             <p className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3">
-              What does "{vocabulary.word}" mean in English?
+              What does &ldquo;{vocabulary.word}&rdquo; mean in English?
             </p>
             
             <div className="flex gap-3 justify-center">
@@ -65,7 +65,7 @@ export default function QuizSection({
                 onClick={onDontKnow}
                 className="px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-full transition-all font-semibold"
               >
-                I Don't Know
+                I Don&apos;t Know
               </button>
             </div>
           </div>
@@ -74,7 +74,7 @@ export default function QuizSection({
             <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-3 text-center">
               <p className="text-sm text-gray-600 dark:text-gray-400">You said:</p>
               <p className="text-lg font-semibold text-gray-900 dark:text-white">
-                "{spokenText}"
+                &ldquo;{spokenText}&rdquo;
               </p>
             </div>
           )}
@@ -132,7 +132,7 @@ export default function QuizSection({
             <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-3 text-center">
               <p className="text-sm text-gray-600 dark:text-gray-400">You said:</p>
               <p className="text-lg font-semibold text-gray-900 dark:text-white">
-                "{spokenText}"
+                &ldquo;{spokenText}&rdquo;
               </p>
             </div>
           )}
@@ -146,7 +146,7 @@ export default function QuizSection({
             <div className="flex items-center justify-center gap-2 mb-3">
               <CheckCircle className="w-6 h-6 text-green-600 dark:text-green-400" />
               <h4 className="text-2xl font-bold text-green-800 dark:text-green-300">
-                Correct! It's "{vocabulary.translation}"
+                Correct! It&apos;s &ldquo;{vocabulary.translation}&rdquo;
               </h4>
             </div>
             

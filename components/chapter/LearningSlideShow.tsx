@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { X } from "lucide-react";
 import { speak } from "@/utils/textToSpeech";
 import { useSpeechRecognition } from "@/hooks/useSpeechRecognition";
@@ -26,7 +26,6 @@ export default function LearningSlideShow({
   const [showTranslation, setShowTranslation] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [completed, setCompleted] = useState(false);
-  const [voicesLoaded, setVoicesLoaded] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showHint, setShowHint] = useState(false);
   const [score, setScore] = useState(0);
@@ -69,7 +68,6 @@ export default function LearningSlideShow({
       const loadVoices = () => {
         const voices = window.speechSynthesis.getVoices();
         if (voices.length > 0) {
-          setVoicesLoaded(true);
           console.log("Available voices:", voices.map(v => `${v.name} (${v.lang})`));
         }
       };
@@ -94,6 +92,15 @@ export default function LearningSlideShow({
     };
   }, []);
 
+  // Handle speaking function
+  const handleSpeak = useCallback(async (text: string) => {
+    await speak(text, languageCode, {
+      onStart: () => setIsSpeaking(true),
+      onEnd: () => setIsSpeaking(false),
+      onError: () => setIsSpeaking(false),
+    }, audioRef);
+  }, [languageCode]);
+
   // Auto-start listening after speech ends
   useEffect(() => {
     if (!isSpeaking && showTranslation && !showHint && !isListening) {
@@ -102,7 +109,7 @@ export default function LearningSlideShow({
       }, 500);
       return () => clearTimeout(timer);
     }
-  }, [isSpeaking, showTranslation, showHint, isListening]);
+  }, [isSpeaking, showTranslation, showHint, isListening, startListening]);
 
   // Auto-speak when vocabulary changes
   useEffect(() => {
@@ -116,17 +123,9 @@ export default function LearningSlideShow({
       }, 500);
       return () => clearTimeout(timer);
     }
-  }, [currentIndex]);
+  }, [currentVocab, showTranslation, handleSpeak]);
 
-  const handleSpeak = async (text: string) => {
-    await speak(text, languageCode, {
-      onStart: () => setIsSpeaking(true),
-      onEnd: () => setIsSpeaking(false),
-      onError: () => setIsSpeaking(false),
-    }, audioRef);
-  };
-
-  const handleNext = (isCorrect: boolean = false) => {
+  const handleNext = (_isCorrect: boolean = false) => {
     setShowTranslation(false);
     setShowSuccess(false);
     setShowHint(false);
@@ -181,10 +180,18 @@ export default function LearningSlideShow({
       utterance.pitch = 1;
       utterance.volume = 1;
       
+      setIsSpeaking(true);
+      
       utterance.onend = () => {
+        setIsSpeaking(false);
+        // Auto-start listening after a short delay
         setTimeout(() => {
           startListening();
         }, 500);
+      };
+      
+      utterance.onerror = () => {
+        setIsSpeaking(false);
       };
       
       window.speechSynthesis.speak(utterance);
@@ -192,11 +199,30 @@ export default function LearningSlideShow({
   };
 
   const handleHearAgain = () => {
+    stopListening(); // Stop listening first
+    
     if ("speechSynthesis" in window) {
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(currentVocab.translation);
       utterance.lang = "en-US";
       utterance.rate = 0.8;
+      utterance.pitch = 1;
+      utterance.volume = 1;
+      
+      setIsSpeaking(true);
+      
+      utterance.onend = () => {
+        setIsSpeaking(false);
+        // Auto-start listening after a short delay
+        setTimeout(() => {
+          startListening();
+        }, 500);
+      };
+      
+      utterance.onerror = () => {
+        setIsSpeaking(false);
+      };
+      
       window.speechSynthesis.speak(utterance);
     }
   };
@@ -271,7 +297,7 @@ export default function LearningSlideShow({
           {reviewing && (
             <div className="mb-6 p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg border border-orange-200 dark:border-orange-800">
               <p className="text-center text-orange-800 dark:text-orange-300 font-medium">
-                🎯 Let's practice these words again! No points this time, just learning.
+                🎯 Let&apos;s practice these words again! No points this time, just learning.
               </p>
             </div>
           )}

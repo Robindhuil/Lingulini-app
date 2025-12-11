@@ -4,14 +4,14 @@ import PackContent from "@/components/pack/PackContent";
 import { notFound } from "next/navigation";
 
 interface PackPageProps {
-  params: {
+  params: Promise<{
     languageCode: string;
     packId: string;
-  };
+  }>;
 }
 
 export default async function PackPage({ params }: PackPageProps) {
-  const { languageCode, packId } = params;
+  const { languageCode, packId } = await params;
   const session = await auth();
   const isAdmin = session?.user?.role === "ADMIN";
 

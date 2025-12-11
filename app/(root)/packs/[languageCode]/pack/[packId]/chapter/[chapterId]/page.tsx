@@ -5,11 +5,11 @@ import { notFound } from "next/navigation";
 import ChapterContent from "@/components/chapter/ChapterContent";
 
 interface ChapterPageProps {
-  params: {
+  params: Promise<{
     languageCode: string;
     packId: string;
     chapterId: string;
-  };
+  }>;
 }
 
 export default async function ChapterPage({ params }: ChapterPageProps) {

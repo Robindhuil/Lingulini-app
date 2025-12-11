@@ -68,7 +68,7 @@ export default function PacksSection({
       } else {
         alert(result.error || "Failed to delete pack");
       }
-    } catch (error) {
+    } catch (_error) {
       alert("An unexpected error occurred");
     } finally {
       setDeleteLoading(false);

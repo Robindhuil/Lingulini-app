@@ -3,6 +3,7 @@
  * Displays the word, pronunciation, image, and listen button
  */
 
+import Image from "next/image";
 import { Volume2 } from "lucide-react";
 
 export interface Vocabulary {
@@ -32,9 +33,11 @@ export default function VocabularyCard({
       {/* Image */}
       {vocabulary.imageUrl && (
         <div className="mb-6">
-          <img
+          <Image
             src={vocabulary.imageUrl}
             alt={vocabulary.word}
+            width={448}
+            height={300}
             className="max-w-md w-full mx-auto rounded-lg shadow-lg"
           />
         </div>

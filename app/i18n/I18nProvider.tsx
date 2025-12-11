@@ -6,7 +6,7 @@ import de from "../locales/de.json";
 import nl from "../locales/nl.json";
 
 type Locale = "sk" | "en" | "de" | "nl";
-const translations: Record<Locale, any> = { sk, en, de, nl };
+const translations: Record<Locale, Record<string, unknown>> = { sk, en, de, nl };
 
 type I18nContextType = {
     locale: Locale;
@@ -40,10 +40,10 @@ export function I18nProvider({ children, initial = "sk" as Locale }: { children:
     const t = useMemo(
         () => (key: string) => {
             const keys = key.split(".");
-            let v: any = translations[locale];
+            let v: unknown = translations[locale];
             for (const k of keys) {
                 if (v == null) return key;
-                v = v[k];
+                v = (v as Record<string, unknown>)[k];
             }
             return typeof v === "string" ? v : key;
         },

@@ -92,7 +92,7 @@ export default function AddVocabularyModal({
       } else {
         setError(result.error || `Failed to ${editVocabulary ? 'update' : 'create'} vocabulary`);
       }
-    } catch (err) {
+    } catch (_err) {
       setError("An unexpected error occurred");
     } finally {
       setLoading(false);
@@ -150,7 +150,7 @@ export default function AddVocabularyModal({
                     name="type"
                     value={type}
                     checked={formData.type === type}
-                    onChange={(e) => setFormData({ ...formData, type: e.target.value as any })}
+                    onChange={(e) => setFormData({ ...formData, type: e.target.value as "WORD" | "PHRASE" | "SENTENCE" })}
                     className="mr-2"
                   />
                   <span className="text-sm text-gray-700 dark:text-gray-300">
