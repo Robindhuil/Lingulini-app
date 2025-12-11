@@ -57,7 +57,7 @@ export default function LearningSlideShow({
       }
       setTimeout(() => {
         setShowSuccess(false);
-        handleNext(true); // true = correct answer
+        handleNext();
       }, 1500);
     },
   });
