@@ -66,7 +66,7 @@ export default function PackContent({ pack, chapters, isAdmin, currentChapterId 
       } else {
         alert(result.error || "Failed to delete chapter");
       }
-    } catch (_error) {
+    } catch {
       alert("An unexpected error occurred");
     } finally {
       setDeleteLoading(false);

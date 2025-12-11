@@ -125,7 +125,7 @@ export default function LearningSlideShow({
     }
   }, [currentVocab, showTranslation, handleSpeak]);
 
-  const handleNext = (_isCorrect: boolean = false) => {
+  const handleNext = () => {
     setShowTranslation(false);
     setShowSuccess(false);
     setShowHint(false);

@@ -91,7 +91,7 @@ export default function AddCourseModal({ isOpen, onClose, editCourse = null }: A
       } else {
         setError(result.error || `Failed to ${editCourse ? 'update' : 'create'} course`);
       }
-    } catch (_err) {
+    } catch {
       setError("An unexpected error occurred");
     } finally {
       setLoading(false);

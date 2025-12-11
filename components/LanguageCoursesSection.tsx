@@ -83,7 +83,7 @@ export default function LanguageCoursesSection({ courses, isAdmin }: LanguageCou
       } else {
         alert(result.error || "Failed to delete course");
       }
-    } catch (_error) {
+    } catch {
       alert("An unexpected error occurred");
     } finally {
       setDeleteLoading(false);

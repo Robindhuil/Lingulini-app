@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Menu, X, LogOut, Sun, Moon, Shield, Sparkles } from "lucide-react";
-import { useTranslation } from "@/app/i18n/I18nProvider";
+
 import LanguageSelector from "./LanguageSelector";
 import { useTheme } from "@/app/theme/ThemeProvider";
 import { useRouter } from "next/navigation";

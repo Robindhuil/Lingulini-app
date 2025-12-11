@@ -92,7 +92,7 @@ export default function AddVocabularyModal({
       } else {
         setError(result.error || `Failed to ${editVocabulary ? 'update' : 'create'} vocabulary`);
       }
-    } catch (_err) {
+    } catch {
       setError("An unexpected error occurred");
     } finally {
       setLoading(false);

@@ -110,7 +110,7 @@ export default function ChapterContent({
       } else {
         alert(result.error || "Failed to delete vocabulary");
       }
-    } catch (_error) {
+    } catch {
       alert("An unexpected error occurred");
     } finally {
       setDeleteLoading(false);
@@ -149,7 +149,7 @@ export default function ChapterContent({
       } else {
         alert(result.error || "Failed to delete chapter");
       }
-    } catch (_error) {
+    } catch {
       alert("An unexpected error occurred");
     } finally {
       setChapterDeleteLoading(false);

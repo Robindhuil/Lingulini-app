@@ -66,7 +66,7 @@ export default function AddChapterModal({ isOpen, onClose, packId, packName, edi
       } else {
         setError(result.error || `Failed to ${editChapter ? 'update' : 'create'} chapter`);
       }
-    } catch (_err) {
+    } catch {
       setError("An unexpected error occurred");
     } finally {
       setLoading(false);

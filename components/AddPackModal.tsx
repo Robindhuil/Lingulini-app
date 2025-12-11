@@ -70,7 +70,7 @@ export default function AddPackModal({ isOpen, onClose, courseId, courseName, ed
       } else {
         setError(result.error || `Failed to ${editPack ? 'update' : 'create'} pack`);
       }
-    } catch (_err) {
+    } catch {
       setError("An unexpected error occurred");
     } finally {
       setLoading(false);

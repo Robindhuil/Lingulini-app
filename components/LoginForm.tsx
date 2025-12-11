@@ -1,12 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
 import { Mail, Eye, EyeOff, AlertCircle, Sparkles } from "lucide-react";
-import { useTranslation } from "@/app/i18n/I18nProvider";
 import { useRouter } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
 
 export default function LoginForm() {
-    const { t: _t } = useTranslation();
     const router = useRouter();
 
     const [email, setEmail] = useState("");
@@ -15,7 +13,7 @@ export default function LoginForm() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
 
-    const { data: _session, status } = useSession();
+    const { status } = useSession();
 
     useEffect(() => {
         if (status === "authenticated") {
