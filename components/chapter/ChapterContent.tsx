@@ -73,6 +73,7 @@ export default function ChapterContent({
   const [isRemoveModalOpen, setIsRemoveModalOpen] = useState(false);
   const [vocabToDelete, setVocabToDelete] = useState<Vocabulary | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   
   // Chapter editing/deletion state
   const [isChapterModalOpen, setIsChapterModalOpen] = useState(false);
@@ -174,22 +175,33 @@ export default function ChapterContent({
         onAddChapter={() => setIsChapterModalOpen(true)}
         onEditChapter={handleEditChapter}
         onDeleteChapter={handleDeleteChapter}
+        isMobileOpen={isSidebarOpen}
+        onMobileClose={() => setIsSidebarOpen(false)}
       />
 
+      {/* Mobile Menu Button */}
+      <button
+        onClick={() => setIsSidebarOpen(true)}
+        className="lg:hidden fixed bottom-6 left-6 z-30 p-4 bg-primary text-white rounded-full shadow-lg hover:bg-primary/90 transition-all"
+        aria-label="Open chapters menu"
+      >
+        <BookOpen className="w-6 h-6" />
+      </button>
+
       {/* Main Content */}
-      <div className="ml-80 min-h-screen p-8">
+      <div className="lg:ml-80 min-h-screen p-4 sm:p-6 lg:p-8">
         <div className="max-w-4xl mx-auto">
           {/* Chapter Header */}
-          <div className="mb-8">
-            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mb-2">
+          <div className="mb-6 sm:mb-8">
+            <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-2">
               <span>{chapter.pack.emoji || "📦"}</span>
               <span>{chapter.pack.title}</span>
             </div>
-            <h1 className="text-4xl md:text-5xl font-black text-primary mb-2">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-primary mb-2">
               {chapter.title}
             </h1>
             {chapter.description && (
-              <p className="text-lg text-gray-600 dark:text-gray-400">
+              <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400">
                 {chapter.description}
               </p>
             )}
@@ -199,10 +211,10 @@ export default function ChapterContent({
           {hasVocabularies && (
             <button
               onClick={() => setIsLearningMode(true)}
-              className="mb-8 btn-primary px-8 py-4 rounded-2xl flex items-center gap-3 mx-auto text-lg font-bold shadow-lg hover:shadow-xl transition-all"
+              className="mb-6 sm:mb-8 btn-primary px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-xl sm:rounded-2xl flex items-center gap-2 sm:gap-3 mx-auto text-base sm:text-lg font-bold shadow-lg hover:shadow-xl transition-all w-full sm:w-auto justify-center"
             >
-              <PlayCircle className="w-6 h-6" />
-              Start Chapter: {chapter.title}
+              <PlayCircle className="w-5 h-5 sm:w-6 sm:h-6" />
+              <span className="truncate">Start Chapter: {chapter.title}</span>
             </button>
           )}
 
@@ -219,31 +231,31 @@ export default function ChapterContent({
 
           {/* Vocabulary List - Only for Admin */}
           {isAdmin && vocabularies.length > 0 && (
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {vocabularies.map((vocab, index) => (
                 <div
                   key={vocab.id}
-                  className="relative group card-playful p-6 hover:shadow-lg transition-all cursor-pointer"
+                  className="relative group card-playful p-4 sm:p-6 hover:shadow-lg transition-all cursor-pointer"
                   onClick={() => setSelectedVocab(selectedVocab?.id === vocab.id ? null : vocab)}
                 >
-                  <div className="flex items-start gap-4">
+                  <div className="flex items-start gap-3 sm:gap-4">
                     {/* Number Badge */}
-                    <div className="shrink-0 w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold">
+                    <div className="shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-primary text-white flex items-center justify-center text-sm sm:text-base font-bold">
                       {index + 1}
                     </div>
 
                     {/* Content */}
-                    <div className="flex-1">
+                    <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between mb-2">
-                        <div>
-                          <h3 className="text-2xl font-bold text-primary mb-1">
+                        <div className="flex-1 min-w-0">
+                          <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-primary mb-1 wrap-break-word">
                             {vocab.word}
                           </h3>
-                          <p className="text-lg text-gray-700 dark:text-gray-300">
+                          <p className="text-base sm:text-lg text-gray-700 dark:text-gray-300 wrap-break-word">
                             {vocab.translation}
                           </p>
                           {vocab.pronunciation && (
-                            <p className="text-sm text-gray-500 dark:text-gray-500 italic mt-1">
+                            <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-500 italic mt-1">
                               {vocab.pronunciation}
                             </p>
                           )}
@@ -317,7 +329,7 @@ export default function ChapterContent({
                   </div>
 
                   {/* Admin Actions */}
-                  <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="absolute top-4 right-4 flex gap-2 transition-opacity">
                     <button
                       onClick={(e) => handleEditVocab(vocab, e)}
                       className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-lg"

@@ -76,7 +76,7 @@ export default function AddChapterModal({ isOpen, onClose, packId, packName, edi
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4">
       {/* Backdrop with blur */}
       <div 
         className="absolute inset-0 bg-black/60 backdrop-blur-sm"
@@ -84,11 +84,11 @@ export default function AddChapterModal({ isOpen, onClose, packId, packName, edi
       />
       
       {/* Modal */}
-      <div className="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <div className="relative bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-2xl max-w-2xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4 flex items-center justify-between">
+        <div className="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-bold text-primary">
+            <h2 className="text-xl sm:text-2xl font-bold text-primary">
               {editChapter ? "Edit Chapter ✏️" : "Add New Chapter 📖"}
             </h2>
             <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">

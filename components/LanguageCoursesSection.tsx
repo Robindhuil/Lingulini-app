@@ -98,15 +98,15 @@ export default function LanguageCoursesSection({ courses, isAdmin }: LanguageCou
 
   return (
     <>
-      <section className="max-w-6xl mx-auto px-4 py-16">
-        <h2 className="text-4xl md:text-5xl font-black text-center mb-4 text-primary">
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12 lg:py-16">
+        <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-center mb-3 sm:mb-4 text-primary">
           Choose Your Language Adventure! 🗣️
         </h2>
-        <p className="text-center text-lg text-secondary mb-12">
+        <p className="text-center text-base sm:text-lg text-secondary mb-8 sm:mb-12 px-4">
           Pick a language you want to learn and start your journey
         </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
           {courses.map((course) => (
             <LanguageCard
               key={course.id}

@@ -33,16 +33,16 @@ export default function QuizSection({
     <div className="animate-fadeIn">
       {/* Quiz Mode - Before showing translation */}
       {!showSuccess && !showHint && (
-        <div className="mb-6 space-y-4">
+        <div className="mb-4 sm:mb-6 space-y-3 sm:space-y-4 px-4">
           <div className="text-center">
-            <p className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3">
+            <p className="text-base sm:text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3 break-words">
               What does &ldquo;{vocabulary.word}&rdquo; mean in English?
             </p>
             
-            <div className="flex gap-3 justify-center">
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-center">
               <button
                 onClick={isListening ? onStopListening : onStartListening}
-                className={`inline-flex items-center gap-2 px-6 py-3 rounded-full transition-all font-semibold ${
+                className={`inline-flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 rounded-full transition-all text-sm sm:text-base font-semibold ${
                   isListening
                     ? "bg-red-500 hover:bg-red-600 text-white animate-pulse"
                     : "bg-blue-500 hover:bg-blue-600 text-white"
@@ -50,12 +50,12 @@ export default function QuizSection({
               >
                 {isListening ? (
                   <>
-                    <MicOff className="w-5 h-5" />
+                    <MicOff className="w-4 h-4 sm:w-5 sm:h-5" />
                     Listening...
                   </>
                 ) : (
                   <>
-                    <Mic className="w-5 h-5" />
+                    <Mic className="w-4 h-4 sm:w-5 sm:h-5" />
                     Speak the Answer
                   </>
                 )}
@@ -63,7 +63,7 @@ export default function QuizSection({
 
               <button
                 onClick={onDontKnow}
-                className="px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-full transition-all font-semibold"
+                className="px-4 sm:px-6 py-2.5 sm:py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-full transition-all text-sm sm:text-base font-semibold"
               >
                 I Don&apos;t Know
               </button>
@@ -83,20 +83,20 @@ export default function QuizSection({
 
       {/* Hint Section - After clicking "I Don't Know" */}
       {showHint && !showSuccess && (
-        <div className="mb-6 space-y-4">
-          <div className="bg-blue-100 dark:bg-blue-900/30 rounded-2xl p-6">
-            <div className="text-center mb-4">
-              <p className="text-lg text-gray-700 dark:text-gray-300 mb-2">
+        <div className="mb-4 sm:mb-6 space-y-3 sm:space-y-4 px-4">
+          <div className="bg-blue-100 dark:bg-blue-900/30 rounded-xl sm:rounded-2xl p-4 sm:p-6">
+            <div className="text-center mb-3 sm:mb-4">
+              <p className="text-base sm:text-lg text-gray-700 dark:text-gray-300 mb-2">
                 The answer is:
               </p>
-              <h4 className="text-3xl font-bold text-blue-800 dark:text-blue-300 mb-3">
+              <h4 className="text-2xl sm:text-3xl font-bold text-blue-800 dark:text-blue-300 mb-3 break-words">
                 {vocabulary.translation}
               </h4>
               <button
                 onClick={onHearAgain}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-full transition-all text-sm font-semibold"
+                className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-full transition-all text-xs sm:text-sm font-semibold"
               >
-                <Volume2 className="w-4 h-4" />
+                <Volume2 className="w-3 h-3 sm:w-4 sm:h-4" />
                 Hear it Again
               </button>
               <p className="text-sm text-gray-600 dark:text-gray-400 mt-3">

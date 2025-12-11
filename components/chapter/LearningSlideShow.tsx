@@ -253,17 +253,17 @@ export default function LearningSlideShow({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80">
-      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80">
+      <div className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-2xl max-w-4xl w-full max-h-[98vh] sm:max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+        <div className="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 sm:px-6 py-3 sm:py-4">
+          <div className="flex items-center justify-between mb-2 sm:mb-3">
+            <h2 className="text-base sm:text-lg lg:text-xl font-bold text-gray-900 dark:text-white truncate pr-2">
               {reviewing ? "📝 The Words You Missed!" : chapterName}
             </h2>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 sm:gap-4">
               {!reviewing && (
-                <div className="text-lg font-bold text-primary">
+                <div className="text-sm sm:text-base lg:text-lg font-bold text-primary whitespace-nowrap">
                   Score: {score}/{maxScore}
                 </div>
               )}
@@ -271,18 +271,18 @@ export default function LearningSlideShow({
                 onClick={onClose}
                 className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
               >
-                <X className="w-6 h-6" />
+                <X className="w-5 h-5 sm:w-6 sm:h-6" />
               </button>
             </div>
           </div>
           {/* Progress Bar */}
-          <div className="relative h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+          <div className="relative h-1.5 sm:h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
             <div
               className="absolute top-0 left-0 h-full bg-primary transition-all duration-300"
               style={{ width: `${progress}%` }}
             />
           </div>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mt-2 text-center">
+          <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1.5 sm:mt-2 text-center">
             {reviewing ? (
               <>Practice {processedCount} / {totalWords} missed words</>
             ) : (
@@ -292,11 +292,11 @@ export default function LearningSlideShow({
         </div>
 
         {/* Main Content */}
-        <div className="p-8">
+        <div className="p-4 sm:p-6 lg:p-8">
           {/* Review Phase Message */}
           {reviewing && (
-            <div className="mb-6 p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg border border-orange-200 dark:border-orange-800">
-              <p className="text-center text-orange-800 dark:text-orange-300 font-medium">
+            <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg border border-orange-200 dark:border-orange-800">
+              <p className="text-center text-orange-800 dark:text-orange-300 text-sm sm:text-base font-medium">
                 🎯 Let&apos;s practice these words again! No points this time, just learning.
               </p>
             </div>

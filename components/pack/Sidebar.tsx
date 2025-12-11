@@ -25,6 +25,8 @@ interface SidebarProps {
   onAddChapter: () => void;
   onEditChapter?: (chapter: Chapter) => void;
   onDeleteChapter?: (chapter: Chapter) => void;
+  isMobileOpen?: boolean;
+  onMobileClose?: () => void;
 }
 
 export default function Sidebar({ 
@@ -35,13 +37,15 @@ export default function Sidebar({
   isAdmin,
   onAddChapter,
   onEditChapter,
-  onDeleteChapter
+  onDeleteChapter,
+  isMobileOpen = false,
+  onMobileClose
 }: SidebarProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
-  if (isCollapsed) {
+  if (isCollapsed && !isMobileOpen) {
     return (
-      <div className="fixed left-0 top-20 h-[calc(100vh-5rem)] bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 shadow-lg z-40">
+      <div className="hidden lg:block fixed left-0 top-20 h-[calc(100vh-5rem)] bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 shadow-lg z-40">
         <button
           onClick={() => setIsCollapsed(false)}
           className="p-4 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
@@ -54,18 +58,41 @@ export default function Sidebar({
   }
 
   return (
-    <div className="fixed left-0 top-20 h-[calc(100vh-5rem)] w-80 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 shadow-lg overflow-y-auto z-40">
-      {/* Header */}
-      <div className="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 py-4 flex items-center justify-between">
-        <h3 className="text-lg font-bold text-gray-900 dark:text-white">Chapters</h3>
-        <button
-          onClick={() => setIsCollapsed(true)}
-          className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
-          aria-label="Collapse sidebar"
-        >
-          <ChevronLeft className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-        </button>
-      </div>
+    <>
+      {/* Mobile Overlay */}
+      {isMobileOpen && (
+        <div 
+          className="lg:hidden fixed inset-0 bg-black/60 z-40"
+          onClick={onMobileClose}
+        />
+      )}
+      
+      {/* Sidebar */}
+      <div className={`fixed left-0 top-0 lg:top-20 h-screen lg:h-[calc(100vh-5rem)] w-80 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 shadow-lg overflow-y-auto z-50 lg:z-40 transition-transform duration-300 ${
+        isMobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+      }`}>
+        {/* Header */}
+        <div className="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 py-4 flex items-center justify-between">
+          <h3 className="text-lg font-bold text-gray-900 dark:text-white">Chapters</h3>
+          <div className="flex items-center gap-2">
+            {/* Mobile Close Button */}
+            <button
+              onClick={onMobileClose}
+              className="lg:hidden p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
+              aria-label="Close sidebar"
+            >
+              <ChevronLeft className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+            </button>
+            {/* Desktop Collapse Button */}
+            <button
+              onClick={() => setIsCollapsed(true)}
+              className="hidden lg:block p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
+              aria-label="Collapse sidebar"
+            >
+              <ChevronLeft className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+            </button>
+          </div>
+        </div>
 
       {/* Chapters List */}
       <div className="p-4 space-y-2">
@@ -106,7 +133,7 @@ export default function Sidebar({
 
               {/* Admin Actions */}
               {isAdmin && (
-                <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="absolute top-2 right-2 flex gap-1 transition-opacity">
                   <button
                     onClick={(e) => {
                       e.preventDefault();
@@ -156,6 +183,7 @@ export default function Sidebar({
           </p>
         </div>
       )}
-    </div>
+      </div>
+    </>
   );
 }

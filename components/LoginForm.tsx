@@ -64,7 +64,7 @@ export default function LoginForm() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center px-4 py-12 relative overflow-hidden">
+        <div className="min-h-screen flex items-center justify-center px-4 py-8 sm:py-12 relative overflow-hidden">
             {/* Playful Background Elements */}
             <div className="absolute inset-0 opacity-10">
                 <div className="absolute top-10 left-10 w-32 h-32 bg-primary rounded-full animate-float"></div>
@@ -74,14 +74,14 @@ export default function LoginForm() {
             </div>
 
             <div className="w-full max-w-md relative z-10">
-                <div className="card-playful p-8 md:p-10">
+                <div className="card-playful p-6 sm:p-8 md:p-10">
                     {/* Header */}
-                    <div className="text-center mb-8">
-                        <div className="text-6xl mb-4 animate-bounce-subtle">🌍</div>
-                        <h1 className="text-4xl font-black mb-2 bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent">
+                    <div className="text-center mb-6 sm:mb-8">
+                        <div className="text-5xl sm:text-6xl mb-3 sm:mb-4 animate-bounce-subtle">🌍</div>
+                        <h1 className="text-3xl sm:text-4xl font-black mb-2 bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent">
                             Welcome Back!
                         </h1>
-                        <p className="text-muted">Log in to continue your language adventure</p>
+                        <p className="text-sm sm:text-base text-muted">Log in to continue your language adventure</p>
                     </div>
 
                     {/* Error Message */}
@@ -93,10 +93,10 @@ export default function LoginForm() {
                     )}
 
                     {/* Login Form */}
-                    <form onSubmit={handleSubmit} className="space-y-6">
+                    <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
                         {/* Email Input */}
                         <div>
-                            <label htmlFor="email" className="block text-sm font-bold text-primary mb-2">
+                            <label htmlFor="email" className="block text-xs sm:text-sm font-bold text-primary mb-2">
                                 📧 Email Address
                             </label>
                             <div className="relative">
@@ -116,7 +116,7 @@ export default function LoginForm() {
 
                         {/* Password Input */}
                         <div>
-                            <label htmlFor="password" className="block text-sm font-bold text-primary mb-2">
+                            <label htmlFor="password" className="block text-xs sm:text-sm font-bold text-primary mb-2">
                                 🔒 Password
                             </label>
                             <div className="relative">
@@ -144,7 +144,7 @@ export default function LoginForm() {
                         <button
                             type="submit"
                             disabled={isLoading}
-                            className="w-full btn-primary py-4 text-lg font-black flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full btn-primary py-3 sm:py-4 text-base sm:text-lg font-black flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {isLoading ? (
                                 <>

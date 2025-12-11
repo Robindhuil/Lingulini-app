@@ -83,27 +83,27 @@ export default function PacksSection({
 
   return (
     <>
-      <div className="max-w-6xl mx-auto px-4 py-16">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12 lg:py-16">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-black mb-4 text-primary">
+        <div className="text-center mb-8 sm:mb-12">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black mb-3 sm:mb-4 text-primary">
             {courseName} Packs 📚
           </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-400">
+          <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400">
             Choose a pack to start learning
           </p>
         </div>
 
         {/* Packs Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {packs.map((pack) => (
             <div key={pack.id} className="relative group">
               <Link
                 href={`/packs/${languageCode}/pack/${pack.id}`}
-                className="block card-playful p-6 hover:scale-105 transition-all cursor-pointer border-2 border-transparent hover:border-primary"
+                className="block card-playful p-4 sm:p-6 hover:scale-105 transition-all cursor-pointer border-2 border-transparent hover:border-primary"
               >
-                <div className="text-5xl mb-4 text-center">{pack.emoji || "📦"}</div>
-                <h3 className="text-xl font-bold mb-2 text-primary text-center">
+                <div className="text-4xl sm:text-5xl mb-3 sm:mb-4 text-center">{pack.emoji || "📦"}</div>
+                <h3 className="text-lg sm:text-xl font-bold mb-2 text-primary text-center">
                   {pack.title}
                 </h3>
                 {pack.description && (
@@ -126,7 +126,7 @@ export default function PacksSection({
 
               {/* Admin Actions */}
               {isAdmin && (
-                <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="absolute top-2 right-2 flex gap-2 transition-opacity">
                   <button
                     onClick={(e) => handleEditPack(pack, e)}
                     className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-lg"

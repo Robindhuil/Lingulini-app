@@ -6,6 +6,7 @@ import AddChapterModal from "@/components/AddChapterModal";
 import RemoveModal from "@/components/RemoveModal";
 import { deleteChapter } from "@/app/actions/chapters";
 import Sidebar from "@/components/pack/Sidebar";
+import { BookOpen } from "lucide-react";
 
 interface Chapter {
   id: number;
@@ -41,6 +42,7 @@ export default function PackContent({ pack, chapters, isAdmin, currentChapterId 
   const [isRemoveModalOpen, setIsRemoveModalOpen] = useState(false);
   const [chapterToDelete, setChapterToDelete] = useState<Chapter | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const router = useRouter();
 
   const handleEditChapter = (chapter: Chapter) => {
@@ -91,25 +93,36 @@ export default function PackContent({ pack, chapters, isAdmin, currentChapterId 
         onAddChapter={() => setIsModalOpen(true)}
         onEditChapter={handleEditChapter}
         onDeleteChapter={handleDeleteClick}
+        isMobileOpen={isSidebarOpen}
+        onMobileClose={() => setIsSidebarOpen(false)}
       />
 
+      {/* Mobile Menu Button */}
+      <button
+        onClick={() => setIsSidebarOpen(true)}
+        className="lg:hidden fixed bottom-6 left-6 z-30 p-4 bg-primary text-white rounded-full shadow-lg hover:bg-primary/90 transition-all"
+        aria-label="Open chapters menu"
+      >
+        <BookOpen className="w-6 h-6" />
+      </button>
+
       {/* Main Content */}
-      <div className="ml-80 min-h-screen p-8">
+      <div className="lg:ml-80 min-h-screen p-4 sm:p-6 lg:p-8">
         <div className="max-w-4xl mx-auto">
           {/* Pack Header */}
-          <div className="text-center mb-12">
-            <div className="text-6xl mb-4">{pack.emoji || "📦"}</div>
-            <h1 className="text-4xl md:text-5xl font-black text-primary mb-4">
+          <div className="text-center mb-8 sm:mb-12">
+            <div className="text-5xl sm:text-6xl mb-3 sm:mb-4">{pack.emoji || "📦"}</div>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-primary mb-3 sm:mb-4">
               {pack.title}
             </h1>
-            <p className="text-lg text-gray-600 dark:text-gray-400">
+            <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400">
               Select a chapter from the sidebar to start learning
             </p>
           </div>
 
           {/* Welcome Card */}
-          <div className="card-playful p-8 text-center">
-            <h2 className="text-2xl font-bold text-primary mb-4">
+          <div className="card-playful p-4 sm:p-6 lg:p-8 text-center">
+            <h2 className="text-xl sm:text-2xl font-bold text-primary mb-3 sm:mb-4">
               Welcome to {pack.title}! 🎉
             </h2>
             <p className="text-gray-600 dark:text-gray-400 mb-6">
