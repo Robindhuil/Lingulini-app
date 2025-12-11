@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { createVocabulary, updateVocabulary } from "@/app/actions/vocabulary";
 import { X } from "lucide-react";
+import { useTranslation } from "@/app/i18n/I18nProvider";
 
 interface Vocabulary {
   id: number;
@@ -35,6 +36,7 @@ export default function AddVocabularyModal({
 }: AddVocabularyModalProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const {t} = useTranslation();
   
   const [formData, setFormData] = useState({
     word: "",
@@ -115,7 +117,7 @@ export default function AddVocabularyModal({
         <div className="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
           <div>
             <h2 className="text-xl sm:text-2xl font-bold text-primary">
-              {editVocabulary ? "Edit Vocabulary ✏️" : "Add New Vocabulary 📝"}
+              {editVocabulary ? t("vocabulary.addEdit.editVocabulary") : t("vocabulary.addEdit.addVocabulary")}
             </h2>
             <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
               for {chapterName}
@@ -140,7 +142,7 @@ export default function AddVocabularyModal({
           {/* Type Selection */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-              Type *
+              {t("vocabulary.addEdit.type")}
             </label>
             <div className="flex gap-4">
               {["WORD", "PHRASE", "SENTENCE"].map((type) => (
@@ -165,7 +167,7 @@ export default function AddVocabularyModal({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                {formData.type === "WORD" ? "Word" : formData.type === "PHRASE" ? "Phrase" : "Sentence"} (Slovak) *
+                {formData.type === "WORD" ? t("vocabulary.addEdit.word") : formData.type === "PHRASE" ? t("vocabulary.addEdit.phrase") : t("vocabulary.addEdit.sentence")} (Slovak) *
               </label>
               <input
                 type="text"
@@ -173,13 +175,13 @@ export default function AddVocabularyModal({
                 value={formData.word}
                 onChange={(e) => setFormData({ ...formData, word: e.target.value })}
                 className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                placeholder={formData.type === "WORD" ? "e.g., Ahoj" : formData.type === "PHRASE" ? "e.g., Dobré ráno" : "e.g., Ako sa máš?"}
+                placeholder={formData.type === "WORD" ? t("vocabulary.addEdit.wordPlaceholder") : formData.type === "PHRASE" ? t("vocabulary.addEdit.phrasePlaceholder") : t("vocabulary.addEdit.sentencePlaceholder")}
               />
             </div>
 
             <div>
               <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                Translation (English) *
+                {t("vocabulary.addEdit.translation")} 
               </label>
               <input
                 type="text"
@@ -187,7 +189,7 @@ export default function AddVocabularyModal({
                 value={formData.translation}
                 onChange={(e) => setFormData({ ...formData, translation: e.target.value })}
                 className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                placeholder={formData.type === "WORD" ? "e.g., Hello" : formData.type === "PHRASE" ? "e.g., Good morning" : "e.g., How are you?"}
+                placeholder={formData.type === "WORD" ? t("vocabulary.addEdit.wordTranslationPlaceholder") : formData.type === "PHRASE" ? t("vocabulary.addEdit.phraseTranslationPlaceholder") : t("vocabulary.addEdit.sentenceTranslationPlaceholder")}
               />
             </div>
           </div>
@@ -195,14 +197,14 @@ export default function AddVocabularyModal({
           {/* Pronunciation */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-              Pronunciation (Optional)
+              {t("vocabulary.addEdit.pronunciation")}
             </label>
             <input
               type="text"
               value={formData.pronunciation}
               onChange={(e) => setFormData({ ...formData, pronunciation: e.target.value })}
               className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-              placeholder="e.g., ah-hoy"
+              placeholder={t("vocabulary.addEdit.pronunciationPlaceholder")}
             />
           </div>
 
@@ -210,34 +212,34 @@ export default function AddVocabularyModal({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                Example Sentence (Optional)
+                {t("vocabulary.addEdit.exampleSentence")} 
               </label>
               <textarea
                 value={formData.example}
                 onChange={(e) => setFormData({ ...formData, example: e.target.value })}
                 className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                 rows={2}
-                placeholder="Example usage..."
+                placeholder={t("vocabulary.addEdit.exampleSentencePlaceholder")}
               />
             </div>
 
             <div>
               <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                Example Translation (Optional)
+                {t("vocabulary.addEdit.exampleTranslatedSentence")}
               </label>
               <textarea
                 value={formData.exampleTranslation}
                 onChange={(e) => setFormData({ ...formData, exampleTranslation: e.target.value })}
                 className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                 rows={2}
-                placeholder="Translation of example..."
+                placeholder={t("vocabulary.addEdit.exampleTranslatedSentencePlaceholder")}
               />
             </div>
           </div>
 
           {/* URLs */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
+            {/* <div>
               <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                 Audio URL (Optional)
               </label>
@@ -248,18 +250,18 @@ export default function AddVocabularyModal({
                 className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                 placeholder="https://..."
               />
-            </div>
+            </div> */}
 
             <div>
               <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                Image URL (Optional)
+                {t("vocabulary.addEdit.image")}
               </label>
               <input
                 type="url"
                 value={formData.imageUrl}
                 onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
                 className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                placeholder="https://..."
+                placeholder={t("vocabulary.addEdit.imagePlaceholder")}
               />
             </div>
           </div>
@@ -271,14 +273,14 @@ export default function AddVocabularyModal({
               onClick={onClose}
               className="px-6 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
             >
-              Cancel
+              {t("common.cancel")}
             </button>
             <button
               type="submit"
               disabled={loading}
               className="btn-primary px-6 py-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? (editVocabulary ? "Updating..." : "Adding...") : (editVocabulary ? "Update Vocabulary" : "Add Vocabulary")}
+              {loading ? (editVocabulary ? t("common.saving") : t("common.creating")) : (editVocabulary ? t("vocabulary.admin.editVocabulary") : t("vocabulary.admin.addVocabulary"))}
             </button>
           </div>
         </form>

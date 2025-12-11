@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { Mail, Eye, EyeOff, AlertCircle, Sparkles } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
+import { useTranslation } from "@/app/i18n/I18nProvider";
 
 export default function LoginForm() {
     const router = useRouter();
@@ -12,6 +13,7 @@ export default function LoginForm() {
     const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
+    const { t } = useTranslation();
 
     const { status } = useSession();
 
@@ -79,9 +81,9 @@ export default function LoginForm() {
                     <div className="text-center mb-6 sm:mb-8">
                         <div className="text-5xl sm:text-6xl mb-3 sm:mb-4 animate-bounce-subtle">🌍</div>
                         <h1 className="text-3xl sm:text-4xl font-black mb-2 bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent">
-                            Welcome Back!
+                            {t("login.title")}
                         </h1>
-                        <p className="text-sm sm:text-base text-muted">Log in to continue your language adventure</p>
+                        <p className="text-sm sm:text-base text-muted">{t("login.subtitle")}</p>
                     </div>
 
                     {/* Error Message */}
@@ -97,7 +99,7 @@ export default function LoginForm() {
                         {/* Email Input */}
                         <div>
                             <label htmlFor="email" className="block text-xs sm:text-sm font-bold text-primary mb-2">
-                                📧 Email Address
+                                📧 {t("login.email")}
                             </label>
                             <div className="relative">
                                 <input
@@ -106,7 +108,7 @@ export default function LoginForm() {
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     className="w-full px-4 py-3 pl-12 bg-card border-2 border-gray-300 dark:border-gray-600 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-primary"
-                                    placeholder="your@email.com"
+                                    placeholder={t("login.emailPlaceholder")}
                                     required
                                     disabled={isLoading}
                                 />
@@ -117,7 +119,7 @@ export default function LoginForm() {
                         {/* Password Input */}
                         <div>
                             <label htmlFor="password" className="block text-xs sm:text-sm font-bold text-primary mb-2">
-                                🔒 Password
+                                🔒 {t("login.password")}
                             </label>
                             <div className="relative">
                                 <input
@@ -126,7 +128,7 @@ export default function LoginForm() {
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     className="w-full px-4 py-3 pr-12 bg-card border-2 border-gray-300 dark:border-gray-600 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-primary"
-                                    placeholder="••••••••"
+                                    placeholder={t("login.passwordPlaceholder")}
                                     required
                                     disabled={isLoading}
                                 />
@@ -149,33 +151,16 @@ export default function LoginForm() {
                             {isLoading ? (
                                 <>
                                     <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
-                                    <span>Logging In...</span>
+                                    <span>{t("login.signingIn")}</span>
                                 </>
                             ) : (
                                 <>
                                     <Sparkles size={20} />
-                                    <span>Start Learning!</span>
+                                    <span>{t("login.signIn")}</span>
                                 </>
                             )}
                         </button>
                     </form>
-
-                    {/* Footer */}
-                    <div className="mt-6 text-center">
-                        <p className="text-sm text-muted">
-                            Don&apos;t have an account?{" "}
-                            <button className="text-primary font-bold hover:text-secondary transition-colors">
-                                Sign Up Free
-                            </button>
-                        </p>
-                    </div>
-                </div>
-
-                {/* Fun Tip */}
-                <div className="mt-6 p-4 bg-accent/10 rounded-2xl text-center">
-                    <p className="text-sm font-semibold text-accent">
-                        💡 Tip: Practice for just 10 minutes daily to see amazing progress!
-                    </p>
                 </div>
             </div>
         </div>

@@ -6,8 +6,8 @@ import { useTranslation } from "@/app/i18n/I18nProvider";
 const languages = [
     { locale: "sk", flag: "sk", name: "Slovenčina" },
     { locale: "en", flag: "gb", name: "English" },
-    { locale: "de", flag: "de", name: "Deutsch" },
-    { locale: "nl", flag: "nl", name: "Nederlands" },
+    { locale: "cz", flag: "cz", name: "Čeština" },
+    { locale: "ua", flag: "ua", name: "Українська" },
 ];
 
 export default function LanguageSelector() {
@@ -35,7 +35,7 @@ export default function LanguageSelector() {
                         <button
                             key={lang.locale}
                             onClick={() => {
-                                setLocale(lang.locale as "sk" | "en" | "de" | "nl");
+                                setLocale(lang.locale as "sk" | "en" | "cz" | "ua");
                                 setIsOpen(false);
                             }}
                             className="flex items-center space-x-3 w-full px-4 py-2 text-left text-gray-800 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors duration-200"

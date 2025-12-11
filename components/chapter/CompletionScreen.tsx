@@ -7,6 +7,7 @@
 
 import { useEffect } from "react";
 import { playCelebrationSound } from "@/utils/celebrationSounds";
+import { useTranslation } from "@/app/i18n/I18nProvider";
 
 interface CompletionScreenProps {
   chapterName: string;
@@ -28,6 +29,7 @@ export default function CompletionScreen({
   onClose,
 }: CompletionScreenProps) {
   const percentage = Math.round((score / maxScore) * 100);
+  const {t} = useTranslation();
 
   // Play celebration sound when component mounts
   useEffect(() => {
@@ -40,7 +42,7 @@ export default function CompletionScreen({
       <div className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-2xl max-w-2xl w-full p-4 sm:p-6 lg:p-8 text-center">
         <div className="text-5xl sm:text-6xl mb-4 sm:mb-6">{emoji}</div>
         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-primary mb-3 sm:mb-4">
-          Chapter Complete!
+          {t("slideshow.chapterCompleted")}
         </h2>
         
         {/* Score Display */}
@@ -49,7 +51,7 @@ export default function CompletionScreen({
             {score}/{maxScore}
           </div>
           <div className="text-xl sm:text-2xl font-bold text-gray-700 dark:text-gray-300">
-            {percentage}% Correct
+            {percentage}{t("slideshow.percCorrect")}
           </div>
         </div>
 
@@ -61,7 +63,7 @@ export default function CompletionScreen({
         {missedWordsCount > 0 && (
           <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
             <p className="text-sm sm:text-base text-blue-800 dark:text-blue-300">
-              📝 You reviewed <span className="font-bold">{missedWordsCount}</span> word{missedWordsCount !== 1 ? 's' : ''} you initially missed
+              {t("slideshow.youReviewed")} <span className="font-bold">{missedWordsCount}</span> {t("slideshow.words")} {t("slideshow.youMissed")}.
             </p>
           </div>
         )}
@@ -71,13 +73,13 @@ export default function CompletionScreen({
             onClick={onRestart}
             className="px-4 sm:px-6 py-2.5 sm:py-3 border-2 border-primary text-primary rounded-lg hover:bg-primary hover:text-white transition-all text-sm sm:text-base font-semibold"
           >
-            Review Again
+            {t("slideshow.reviewAgain")}
           </button>
           <button
             onClick={onClose}
             className="btn-primary px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg text-sm sm:text-base font-semibold"
           >
-            Finish
+            {t("slideshow.finish")}
           </button>
         </div>
       </div>

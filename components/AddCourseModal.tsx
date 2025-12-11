@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { createCourse, updateCourse } from "@/app/actions/courses";
 import { X } from "lucide-react";
+import { useTranslation } from "@/app/i18n/I18nProvider";
 
 interface Course {
   id: number;
@@ -40,6 +41,7 @@ const languageOptions = [
 export default function AddCourseModal({ isOpen, onClose, editCourse = null }: AddCourseModalProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const {t} = useTranslation();
   
   const [formData, setFormData] = useState({
     title: "",
@@ -92,7 +94,7 @@ export default function AddCourseModal({ isOpen, onClose, editCourse = null }: A
         setError(result.error || `Failed to ${editCourse ? 'update' : 'create'} course`);
       }
     } catch {
-      setError("An unexpected error occurred");
+      setError(t("common.error"));
     } finally {
       setLoading(false);
     }
@@ -113,7 +115,7 @@ export default function AddCourseModal({ isOpen, onClose, editCourse = null }: A
         {/* Header */}
         <div className="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
           <h2 className="text-xl sm:text-2xl font-bold text-primary">
-            {editCourse ? "Edit Language Course ✏️" : "Add New Language Course 🎓"}
+            {editCourse ? t("courses.addEdit.editCourse") : t("courses.addEdit.addCourse")}
           </h2>
           <button
             onClick={onClose}
@@ -134,7 +136,7 @@ export default function AddCourseModal({ isOpen, onClose, editCourse = null }: A
           {/* Title */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-              Course Title *
+              {t("courses.addEdit.title")} 
             </label>
             <input
               type="text"
@@ -142,21 +144,21 @@ export default function AddCourseModal({ isOpen, onClose, editCourse = null }: A
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
               className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-              placeholder="e.g., Spanish for Beginners"
+              placeholder={t("courses.addEdit.titlePlaceholder")}
             />
           </div>
 
           {/* Description */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-              Description
+              {t("courses.addEdit.description")}
             </label>
             <textarea
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               rows={3}
-              placeholder="Brief description of the course..."
+              placeholder={t("courses.addEdit.descriptionPlaceholder")}
             />
           </div>
 
@@ -164,7 +166,7 @@ export default function AddCourseModal({ isOpen, onClose, editCourse = null }: A
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                Learning Language *
+                {t("courses.addEdit.learningLanguage")} 
               </label>
               <select
                 required
@@ -179,7 +181,7 @@ export default function AddCourseModal({ isOpen, onClose, editCourse = null }: A
                 }}
                 className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               >
-                <option value="">Select language...</option>
+                <option value="">{t("courses.addEdit.selectLanguage")}</option>
                 {languageOptions.map((lang) => (
                   <option key={lang.code} value={lang.code}>
                     {lang.flag} {lang.name}
@@ -190,7 +192,7 @@ export default function AddCourseModal({ isOpen, onClose, editCourse = null }: A
 
             <div>
               <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                For Speakers Of *
+                {t("courses.addEdit.forSpeakersOf")} 
               </label>
               <select
                 required
@@ -210,7 +212,7 @@ export default function AddCourseModal({ isOpen, onClose, editCourse = null }: A
           {/* Level */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-              Level *
+              {t("courses.addEdit.level.level")}
             </label>
             <div className="flex gap-4">
               {["BEGINNER", "INTERMEDIATE", "ADVANCED"].map((level) => (
@@ -234,7 +236,7 @@ export default function AddCourseModal({ isOpen, onClose, editCourse = null }: A
           {/* Emoji */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-              Emoji
+              {t("courses.addEdit.emoji")}
             </label>
             <input
               type="text"
@@ -256,7 +258,7 @@ export default function AddCourseModal({ isOpen, onClose, editCourse = null }: A
               className="mr-2"
             />
             <label htmlFor="isPublished" className="text-sm font-semibold text-gray-700 dark:text-gray-300 cursor-pointer">
-              Publish immediately
+              {t("courses.addEdit.published")}
             </label>
           </div>
 
@@ -267,14 +269,14 @@ export default function AddCourseModal({ isOpen, onClose, editCourse = null }: A
               onClick={onClose}
               className="px-6 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
             >
-              Cancel
+              {t("common.cancel")}
             </button>
             <button
               type="submit"
               disabled={loading}
               className="btn-primary px-6 py-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? (editCourse ? "Updating..." : "Creating...") : (editCourse ? "Update Course" : "Create Course")}
+              {loading ? (editCourse ? t("common.saving") : t("common.creating")) : (editCourse ? t("common.save") : t("common.create"))}
             </button>
           </div>
         </form>

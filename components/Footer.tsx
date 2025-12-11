@@ -1,9 +1,11 @@
 "use client";
 import Link from "next/link";
-import { Heart, Mail, Globe } from "lucide-react";
+import { Heart } from "lucide-react";
+import { useTranslation } from "@/app/i18n/I18nProvider";
 
 export default function Footer() {
     const currentYear = new Date().getFullYear();
+    const {t} = useTranslation();
 
     return (
         <footer className="bg-footer border-t border-gray-200 dark:border-gray-700 mt-20">
@@ -14,44 +16,18 @@ export default function Footer() {
                         <div className="flex items-center space-x-2 mb-4">
                             <span className="text-4xl">🌍</span>
                             <span className="text-2xl font-black bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent">
-                                Lingulini
+                                {t("common.appName")}
                             </span>
-                        </div>
-                        <p className="text-muted mb-4 max-w-md">
-                            Making language learning fun and accessible for children worldwide. Join thousands of young learners on an exciting journey! 🚀
-                        </p>
-                        <div className="flex items-center space-x-4">
-                            <a href="mailto:hello@lingulini.com" className="p-2 bg-primary/10 rounded-full hover:bg-primary/20 transition-colors">
-                                <Mail size={20} className="text-primary" />
-                            </a>
-                            <a href="#" className="p-2 bg-secondary/10 rounded-full hover:bg-secondary/20 transition-colors">
-                                <Globe size={20} className="text-secondary" />
-                            </a>
                         </div>
                     </div>
 
                     {/* Quick Links */}
                     <div>
-                        <h4 className="text-lg font-bold text-primary mb-4">Learn</h4>
+                        <h4 className="text-lg font-bold text-primary mb-4">{t("footer.learn")}</h4>
                         <ul className="space-y-2">
                             <li>
-                                <Link href="/learn" className="text-muted hover:text-primary transition-colors">
-                                    Start Learning
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="/languages" className="text-muted hover:text-primary transition-colors">
-                                    Languages
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="/games" className="text-muted hover:text-primary transition-colors">
-                                    Games
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="/stories" className="text-muted hover:text-primary transition-colors">
-                                    Stories
+                                <Link href="/" className="text-muted hover:text-primary transition-colors">
+                                    {t("footer.languages")}
                                 </Link>
                             </li>
                         </ul>
@@ -62,23 +38,8 @@ export default function Footer() {
                         <h4 className="text-lg font-bold text-primary mb-4">Support</h4>
                         <ul className="space-y-2">
                             <li>
-                                <Link href="/help" className="text-muted hover:text-primary transition-colors">
-                                    Help Center
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="/parents" className="text-muted hover:text-primary transition-colors">
-                                    For Parents
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="/safety" className="text-muted hover:text-primary transition-colors">
-                                    Child Safety
-                                </Link>
-                            </li>
-                            <li>
                                 <Link href="/contact" className="text-muted hover:text-primary transition-colors">
-                                    Contact Us
+                                    {t("footer.contactUs")}
                                 </Link>
                             </li>
                         </ul>
@@ -92,17 +53,6 @@ export default function Footer() {
                         <Heart size={16} className="text-error fill-error" />
                         <span>for young learners • © {currentYear} Lingulini</span>
                     </p>
-                    <div className="flex items-center space-x-4 sm:space-x-6 text-xs sm:text-sm">
-                        <Link href="/privacy" className="text-muted hover:text-primary transition-colors">
-                            Privacy
-                        </Link>
-                        <Link href="/terms" className="text-muted hover:text-primary transition-colors">
-                            Terms
-                        </Link>
-                        <Link href="/cookies" className="text-muted hover:text-primary transition-colors">
-                            Cookies
-                        </Link>
-                    </div>
                 </div>
 
                 {/* Fun Element */}

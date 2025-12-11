@@ -2,11 +2,11 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
 import sk from "../locales/sk.json";
 import en from "../locales/en.json";
-import de from "../locales/de.json";
-import nl from "../locales/nl.json";
+import cz from "../locales/cz.json";
+import ua from "../locales/ua.json";
 
-type Locale = "sk" | "en" | "de" | "nl";
-const translations: Record<Locale, Record<string, unknown>> = { sk, en, de, nl };
+type Locale = "sk" | "en" | "cz" | "ua";
+const translations: Record<Locale, Record<string, unknown>> = { sk, en, cz, ua };
 
 type I18nContextType = {
     locale: Locale;

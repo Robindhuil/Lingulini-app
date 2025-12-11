@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ChevronLeft, ChevronRight, Plus, Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
+import { useTranslation } from "@/app/i18n/I18nProvider";
 
 interface Chapter {
   id: number;
@@ -42,6 +43,7 @@ export default function Sidebar({
   onMobileClose
 }: SidebarProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const { t } = useTranslation();
 
   if (isCollapsed && !isMobileOpen) {
     return (
@@ -73,7 +75,7 @@ export default function Sidebar({
       }`}>
         {/* Header */}
         <div className="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 py-4 flex items-center justify-between">
-          <h3 className="text-lg font-bold text-gray-900 dark:text-white">Chapters</h3>
+          <h3 className="text-lg font-bold text-gray-900 dark:text-white">{t("chapters.title")}</h3>
           <div className="flex items-center gap-2">
             {/* Mobile Close Button */}
             <button
@@ -120,11 +122,11 @@ export default function Sidebar({
                       {chapter.title}
                     </h4>
                     <p className="text-xs opacity-80">
-                      {chapter._count.vocabularies} words
+                      {chapter._count.vocabularies} {t("chapters.words")}
                     </p>
                     {!chapter.isPublished && isAdmin && (
                       <span className="inline-block mt-1 px-2 py-0.5 bg-yellow-500 text-white text-xs rounded">
-                        Draft
+                        {t("common.draft")}
                       </span>
                     )}
                   </div>
@@ -140,7 +142,7 @@ export default function Sidebar({
                       onEditChapter?.(chapter);
                     }}
                     className="p-1.5 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors shadow-lg"
-                    title="Edit chapter"
+                    title={t("chapters.admin.editChapter")}
                   >
                     <Pencil className="w-3 h-3" />
                   </button>
@@ -150,7 +152,7 @@ export default function Sidebar({
                       onDeleteChapter?.(chapter);
                     }}
                     className="p-1.5 bg-red-600 text-white rounded hover:bg-red-700 transition-colors shadow-lg"
-                    title="Delete chapter"
+                    title={t("chapters.admin.deleteChapter")}
                   >
                     <Trash2 className="w-3 h-3" />
                   </button>
@@ -168,7 +170,7 @@ export default function Sidebar({
           >
             <div className="flex items-center justify-center gap-2">
               <Plus className="w-5 h-5" />
-              <span className="text-sm font-semibold">Add Chapter</span>
+              <span className="text-sm font-semibold">{t("chapters.admin.addChapter")}</span>
             </div>
           </button>
         )}
@@ -179,7 +181,7 @@ export default function Sidebar({
         <div className="p-8 text-center">
           <div className="text-4xl mb-2">📖</div>
           <p className="text-sm text-gray-600 dark:text-gray-400">
-            No chapters yet
+            {t("chapters.noChaptersAvailable")}
           </p>
         </div>
       )}

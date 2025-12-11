@@ -1,0 +1,217 @@
+{
+    "common": {
+        "appName": "Lingulini",
+        "loading": "Načítání...",
+        "error": "Došlo k chybě. Zkuste to znovu.",
+        "thisActionCannotBeUndone": "Tuto akci nelze vrátit zpět.",
+        "confirm": "Potvrdit",
+        "cancel": "Zrušit",
+        "close": "Zavřít",
+        "delete": "Odstranit",
+        "deleting": "Odstraňování...",
+        "save": "Uložit",
+        "saving": "Ukládání...",
+        "create": "Vytvořit",
+        "creating": "Vytváření...",
+        "draft": "Koncept"
+    },
+    "navbar": {
+        "home": "Domů",
+        "admin": "Admin",
+        "login": "Přihlásit se",
+        "signOut": "Odhlásit se"
+    },
+    "footer": {
+        "languages": "Jazyky",
+        "learn": "Učit se",
+        "contactUs": "Kontaktujte nás"
+    },
+    "login": {
+        "title": "Vítejte zpět",
+        "subtitle": "Přihlaste se ke svému účtu",
+
+        "email": "E-mailová adresa",
+        "emailPlaceholder": "Zadejte e-mailovou adresu",
+        "emailRequired": "E-mailová adresa je povinná",
+        "emailInvalid": "Zadejte platnou e-mailovou adresu",
+
+        "password": "Heslo",
+        "passwordPlaceholder": "Zadejte heslo",
+        "passwordRequired": "Heslo je povinné",
+
+        "signIn": "Přihlásit se",
+        "signingIn": "Přihlašování..."
+    },
+    "courses": {
+        "title": "Vyberte si jazyk a začněte cestu s Lingulini!",
+        "subtitle": "Vyberte si jazyk, který se chcete naučit, a začněte svou cestu",
+        "addEdit": {
+            "addCourse": "Přidat nový jazykový kurz 🎓",
+            "editCourse": "Upravit jazykový kurz ✏️",
+            "title": "Název kurzu *",
+            "titlePlaceholder": "Zadejte název kurzu",
+            "description": "Popis kurzu",
+            "descriptionPlaceholder": "Zadejte popis kurzu",
+            "learningLanguage": "Učící se jazyk *",
+            "selectLanguage": "Vyberte jazyk",
+
+            "forSpeakersOf": "Pro mluvčí jazyka *",
+            "emoji": "Emoji jazyka",
+            "published": "Publikováno",
+            "level": {
+                "level": "Úroveň *",
+                "beginner": "Začátečník",
+                "intermediate": "Středně pokročilý",
+                "advanced": "Pokročilý"
+            }
+        },
+        "admin": {
+            "addCourse": "Přidat kurz",
+            "editCourse": "Upravit kurz",
+            "manageCourses": "Spravovat kurzy",
+            "deleteCourse": "Odstranit kurz",
+            "confirmDelete": "Opravdu chcete odstranit tento kurz? Tímto také odstraníte všechny jeho lekce a materiály."
+        }
+    },
+    "packs": {
+        "packs": "Balíčky 📚",
+        "choosePack": "Vyberte balíček a začněte se učit",
+        "chapters": "Lekce",
+        "noPacksAvilable": "Momentálně nejsou k dispozici žádné balíčky.",
+        "noPacksCheckbackLater": "Zkontrolujte to později.",
+
+        "selectChapterToStart": "Vyberte lekci a začněte se učit",
+        "welcome": "Vítejte v balíčku",
+        "words": "slov",
+        "lessons": "lekcí",
+        "addEdit": {
+            "addPack": "Přidat nový balíček 📦",
+            "editPack": "Upravit balíček ✏️",
+            "title": "Název balíčku *",
+            "titlePlaceholder": "Zadejte název balíčku",
+            "description": "Popis balíčku",
+            "descriptionPlaceholder": "Zadejte popis balíčku",
+            "emoji": "Emoji balíčku",
+            "published": "Publikováno"
+        },
+        "admin": {
+            "edit": "Upravit balíček",
+            "delete": "Odstranit balíček",
+            "addPack": "Přidat nový balíček",
+            "managePack": "Vytvořte nový vzdělávací balíček",
+            "confirmDelete": "Opravdu chcete odstranit tento balíček? Tímto také odstraníte všechny jeho lekce a materiály."
+        }
+    },
+    "chapters": {
+        "title": "Lekce 🎯",
+        "noChaptersAvailable": "Momentálně nejsou k dispozici žádné lekce.",
+        "startChapter": "Začít lekci",
+        "addVocabulary": "Přidat materiál",
+        "addFirstVocabulary": "Přidat první materiál",
+        "noVocabularyYet": "Zatím žádné materiály",
+
+        "chapterSummary": "📊 Shrnutí lekce",
+        "totalItems": "Celkový počet položek",
+        "words": "slov",
+        "phrases": "frází",
+        "sentences": "vět",
+        "addEdit": {
+            "addChapter": "Přidat novou lekci 📖",
+            "editChapter": "Upravit lekci ✏️",
+            "title": "Název lekce *",
+            "titlePlaceholder": "Zadejte název lekce",
+            "description": "Popis lekce",
+            "descriptionPlaceholder": "Zadejte popis lekce",
+            "published": "Publikováno"
+        },
+        "admin": {
+            "addChapter": "Přidat lekci",
+            "editChapter": "Upravit lekci",
+            "deleteChapter": "Odstranit lekci",
+            "confirmDelete": "Opravdu chcete odstranit tuto lekci? Tímto také odstraníte všechny její slovíčka."
+        }
+    },
+    "vocabulary": {
+        "addEdit": {
+            "addVocabulary": "Přidat nový materiál 📝",
+            "editVocabulary": "Upravit materiál ✏️",
+            "type": "Typ *",
+            "word": "Slovo",
+            "wordPlaceholder": "Ahoj",
+            "phrase": "Fráze",
+            "phrasePlaceholder": "Dobré ráno",
+            "sentence": "Věta",
+            "sentencePlaceholder": "Jak se máš?",
+            "translation": "Překlad *",
+            "wordTranslationPlaceholder": "Hello",
+            "phraseTranslationPlaceholder": "Good morning",
+            "sentenceTranslationPlaceholder": "How are you?",
+            "pronunciation": "Výslovnost (Volitelné)",
+            "pronunciationPlaceholder": "ah-hoy",
+
+            "exampleSentence": "Příkladová věta (Volitelné)",
+            "exampleSentencePlaceholder": "Ahoj! Jak se máš dnes?",
+            "exampleTranslatedSentence": "Překlad příkladové věty (Volitelné)",
+            "exampleTranslatedSentencePlaceholder": "Hello! How are you today?",
+
+            "image": "Obrázek (Volitelné)",
+            "imagePlaceholder": "https://..."
+        },
+        "admin": {
+            "addVocabulary": "Přidat materiál",
+            "editVocabulary": "Upravit materiál",
+            "deleteVocabulary": "Odstranit materiál",
+            "confirmDelete": "Opravdu chcete odstranit tento materiál?"
+        }
+    },
+    "slideshow": {
+        "wordsYouMissed": "📝 Slova, která jste nevěděli",
+        "youMissed": "která jste nevěděli",
+        "score": "Skóre",
+        "practice": "Procvičit",
+        "missedWords": "slova, která jste nevěděli",
+        "words": "slov",
+        "letsPracticeWordsYouMissed": "🎯 Pojďme si procvičit slova, která jste nevěděli! Tentokrát žádné body - jen učení.",
+        "playing": "Přehrávání...",
+        "listen": "Poslechnout",
+        "chapterCompleted": "Lekce dokončena! 🎉",
+        "percCorrect": "% správně",
+        "youReviewed": "📝 Prošli jste si",
+        "reviewAgain": "Zopakovat lekci",
+        "finish": "Dokončit",
+
+        "quiz": {
+            "listening": "Poslouchání...",
+            "repeatTheAnswer": "Vyslovte odpověď",
+            "iDontKnow": "Nevím",
+            "youSaid": "Řekli jste:",
+            "correctAnswer": "Správná odpověď je:",
+            "hearItAgain": "Poslechnout znovu",
+            "nowRepeatItToContinue": "Nyní to zopakujte, abyste mohli pokračovat",
+            "correct": "Správně!",
+            "whatDoesItMean": "Co to znamená?"
+        }
+
+    },
+    "adminPanel": {
+        "title": "Admin Panel",
+        "usersTab": "Uživatelé",
+        "adminTab": "Admin",
+        "usersSection": "Zde bude seznam uživatelů...",
+        "adminSection": "Zde budou administrátorská nastavení...",
+        "usersList": "Seznam uživatelů",
+        "totalUsers": "Počet uživatelů:",
+        "noUsers": "Zatím žádní uživatelé",
+        "table": {
+            "id": "ID",
+            "username": "Uživatelské jméno",
+            "email": "E-mail",
+            "name": "Jméno",
+            "role": "Role",
+            "created": "Vytvořeno",
+            "updated": "Upraveno",
+            "noEmail": "žádný e-mail",
+            "noName": "žádné jméno"
+        }
+    }
+}

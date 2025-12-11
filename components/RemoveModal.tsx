@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslation } from "@/app/i18n/I18nProvider";
 import { X } from "lucide-react";
 
 interface RemoveModalProps {
@@ -21,6 +22,8 @@ export default function RemoveModal({
   itemName,
   loading = false,
 }: RemoveModalProps) {
+  const { t } = useTranslation();
+  
   if (!isOpen) return null;
 
   return (
@@ -55,7 +58,7 @@ export default function RemoveModal({
             </p>
           </div>
           <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
-            ⚠️ This action cannot be undone.
+            ⚠️ {t("common.thisActionCannotBeUndone")}
           </p>
         </div>
 
@@ -67,7 +70,7 @@ export default function RemoveModal({
             disabled={loading}
             className="px-4 sm:px-6 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm sm:text-base text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors disabled:opacity-50 order-2 sm:order-1"
           >
-            Cancel
+            {t("common.cancel")}
           </button>
           <button
             type="button"
@@ -75,7 +78,7 @@ export default function RemoveModal({
             disabled={loading}
             className="px-4 sm:px-6 py-2 bg-red-600 text-white text-sm sm:text-base rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed order-1 sm:order-2"
           >
-            {loading ? "Deleting..." : "Delete"}
+            {loading ? t("common.deleting") : t("common.delete")}
           </button>
         </div>
       </div>

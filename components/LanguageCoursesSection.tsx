@@ -7,6 +7,7 @@ import AddCourseModal from "@/components/AddCourseModal";
 import RemoveModal from "@/components/RemoveModal";
 import { deleteCourse } from "@/app/actions/courses";
 import { Plus } from "lucide-react";
+import { useTranslation } from "@/app/i18n/I18nProvider";
 
 interface Course {
   id: number;
@@ -52,6 +53,7 @@ export default function LanguageCoursesSection({ courses, isAdmin }: LanguageCou
   const [isRemoveModalOpen, setIsRemoveModalOpen] = useState(false);
   const [courseToDelete, setCourseToDelete] = useState<Course | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const { t } = useTranslation();
   const router = useRouter();
 
   const handleLanguageSelect = (langCode: string) => {
@@ -100,10 +102,10 @@ export default function LanguageCoursesSection({ courses, isAdmin }: LanguageCou
     <>
       <section className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12 lg:py-16">
         <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-center mb-3 sm:mb-4 text-primary">
-          Choose Your Language Adventure! 🗣️
+          {t("courses.title")} 🗣️
         </h2>
         <p className="text-center text-base sm:text-lg text-secondary mb-8 sm:mb-12 px-4">
-          Pick a language you want to learn and start your journey
+          {t("courses.subtitle")}
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
@@ -133,10 +135,10 @@ export default function LanguageCoursesSection({ courses, isAdmin }: LanguageCou
                 <Plus className="w-16 h-16 mx-auto text-gray-400" />
               </div>
               <h3 className="text-xl font-bold text-gray-600 dark:text-gray-400">
-                Add New Course
+                {t("courses.admin.addCourse")}
               </h3>
               <p className="text-sm text-gray-500 dark:text-gray-500 mt-2">
-                Create a new language course
+                {t("courses.admin.manageCourses")}
               </p>
             </button>
           )}
@@ -157,10 +159,10 @@ export default function LanguageCoursesSection({ courses, isAdmin }: LanguageCou
           onClose={() => {
             setIsRemoveModalOpen(false);
             setCourseToDelete(null);
-          }}
+          }}  
           onConfirm={handleConfirmDelete}
-          title="Delete Course"
-          description="Are you sure you want to delete this course? This will also delete all associated packs, chapters, and vocabulary."
+          title={t("courses.admin.deleteCourse")}
+          description={t("courses.admin.confirmDelete")}
           itemName={courseToDelete.title}
           loading={deleteLoading}
         />

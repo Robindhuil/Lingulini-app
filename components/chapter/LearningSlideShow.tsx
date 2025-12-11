@@ -7,6 +7,7 @@ import { useSpeechRecognition } from "@/hooks/useSpeechRecognition";
 import VocabularyCard, { type Vocabulary } from "./VocabularyCard";
 import QuizSection from "./QuizSection";
 import CompletionScreen from "./CompletionScreen";
+import { useTranslation } from "@/app/i18n/I18nProvider";
 
 interface LearningSlideShowProps {
   vocabularies: Vocabulary[];
@@ -34,6 +35,7 @@ export default function LearningSlideShow({
   const [missedWords, setMissedWords] = useState<Vocabulary[]>([]);
   const [reviewing, setReviewing] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const {t} = useTranslation();
 
   const currentVocab = vocabQueue[currentIndex];
   const maxScore = vocabularies.length;
@@ -259,12 +261,12 @@ export default function LearningSlideShow({
         <div className="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 sm:px-6 py-3 sm:py-4">
           <div className="flex items-center justify-between mb-2 sm:mb-3">
             <h2 className="text-base sm:text-lg lg:text-xl font-bold text-gray-900 dark:text-white truncate pr-2">
-              {reviewing ? "📝 The Words You Missed!" : chapterName}
+              {reviewing ? t("slideshow.wordsYouMissed") : chapterName}
             </h2>
             <div className="flex items-center gap-2 sm:gap-4">
               {!reviewing && (
                 <div className="text-sm sm:text-base lg:text-lg font-bold text-primary whitespace-nowrap">
-                  Score: {score}/{maxScore}
+                  {t("slideshow.score")}: {score}/{maxScore}
                 </div>
               )}
               <button
@@ -284,9 +286,9 @@ export default function LearningSlideShow({
           </div>
           <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1.5 sm:mt-2 text-center">
             {reviewing ? (
-              <>Practice {processedCount} / {totalWords} missed words</>
+              <>{t("slideshow.practice")} {processedCount} / {totalWords} {t("slideshow.missedWords")}</>
             ) : (
-              <>{processedCount} / {maxScore} words</>
+              <>{processedCount} / {maxScore} {t("slideshow.words")}</>
             )}
           </p>
         </div>
@@ -297,7 +299,7 @@ export default function LearningSlideShow({
           {reviewing && (
             <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg border border-orange-200 dark:border-orange-800">
               <p className="text-center text-orange-800 dark:text-orange-300 text-sm sm:text-base font-medium">
-                🎯 Let&apos;s practice these words again! No points this time, just learning.
+                {t("slideshow.letsPracticeWordsYouMissed")}
               </p>
             </div>
           )}

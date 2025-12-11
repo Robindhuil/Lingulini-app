@@ -11,6 +11,7 @@ import { deleteChapter } from "@/app/actions/chapters";
 import LearningSlideShow from "@/components/chapter/LearningSlideShow";
 import Sidebar from "@/components/pack/Sidebar";
 import { Plus, Volume2, Image as ImageIcon, BookOpen, PlayCircle, Pencil, Trash2 } from "lucide-react";
+import { useTranslation } from "@/app/i18n/I18nProvider";
 
 interface Vocabulary {
   id: number;
@@ -81,6 +82,7 @@ export default function ChapterContent({
   const [isChapterRemoveModalOpen, setIsChapterRemoveModalOpen] = useState(false);
   const [chapterToDelete, setChapterToDelete] = useState<Chapter | null>(null);
   const [chapterDeleteLoading, setChapterDeleteLoading] = useState(false);
+  const { t } = useTranslation();
   
   const router = useRouter();
 
@@ -207,6 +209,41 @@ export default function ChapterContent({
             )}
           </div>
 
+           {/* Progress Summary */}
+          {vocabularies.length > 0 && (
+            <div className="mt-8 mb-8 card-playful p-6">
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">
+                {t("chapters.chapterSummary")}
+              </h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-primary">
+                    {vocabularies.length}
+                  </div>
+                  <div className="text-xs text-gray-600 dark:text-gray-400">{t("chapters.totalItems")}</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                    {vocabularies.filter(v => v.type === "WORD").length}
+                  </div>
+                  <div className="text-xs text-gray-600 dark:text-gray-400">{t("chapters.words")}</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-green-600 dark:text-green-400">
+                    {vocabularies.filter(v => v.type === "PHRASE").length}
+                  </div>
+                  <div className="text-xs text-gray-600 dark:text-gray-400">{t("chapters.phrases")}</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
+                    {vocabularies.filter(v => v.type === "SENTENCE").length}
+                  </div>
+                  <div className="text-xs text-gray-600 dark:text-gray-400">{t("chapters.sentences")}</div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Start Chapter Button - For All Users (when vocabulary exists) */}
           {hasVocabularies && (
             <button
@@ -214,7 +251,7 @@ export default function ChapterContent({
               className="mb-6 sm:mb-8 btn-primary px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-xl sm:rounded-2xl flex items-center gap-2 sm:gap-3 mx-auto text-base sm:text-lg font-bold shadow-lg hover:shadow-xl transition-all w-full sm:w-auto justify-center"
             >
               <PlayCircle className="w-5 h-5 sm:w-6 sm:h-6" />
-              <span className="truncate">Start Chapter: {chapter.title}</span>
+              <span className="truncate">{t("chapters.startChapter")}: {chapter.title}</span>
             </button>
           )}
 
@@ -225,7 +262,7 @@ export default function ChapterContent({
               className="mb-6 btn-secondary px-6 py-3 rounded-lg flex items-center gap-2 mx-auto"
             >
               <Plus className="w-5 h-5" />
-              Add Vocabulary
+              {t("chapters.addVocabulary")}
             </button>
           )}
 
@@ -333,14 +370,14 @@ export default function ChapterContent({
                     <button
                       onClick={(e) => handleEditVocab(vocab, e)}
                       className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-lg"
-                      title="Edit vocabulary"
+                      title={t("vocabulary.admin.editVocabulary")}
                     >
                       <Pencil className="w-4 h-4" />
                     </button>
                     <button
                       onClick={(e) => handleDeleteClick(vocab, e)}
                       className="p-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors shadow-lg"
-                      title="Delete vocabulary"
+                      title={t("vocabulary.admin.deleteVocabulary")}
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -348,12 +385,13 @@ export default function ChapterContent({
                 </div>
               ))}
             </div>
-          )}          {/* Empty State */}
+          )}          
+          {/* Empty State */}
           {vocabularies.length === 0 && (
             <div className="card-playful p-12 text-center">
               <div className="text-6xl mb-4">📚</div>
               <h3 className="text-2xl font-bold text-gray-600 dark:text-gray-400 mb-2">
-                No vocabulary yet
+                {t("chapters.noVocabularyYet")}
               </h3>
               <p className="text-gray-500 dark:text-gray-500 mb-6">
                 {isAdmin 
@@ -366,46 +404,13 @@ export default function ChapterContent({
                   className="btn-primary px-6 py-3 rounded-lg inline-flex items-center gap-2"
                 >
                   <Plus className="w-5 h-5" />
-                  Add First Vocabulary
+                  {t("chapters.addFirstVocabulary")}
                 </button>
               )}
             </div>
           )}
 
-          {/* Progress Summary - Only for Admin */}
-          {vocabularies.length > 0 && isAdmin && (
-            <div className="mt-8 card-playful p-6">
-              <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">
-                📊 Chapter Summary
-              </h3>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-primary">
-                    {vocabularies.length}
-                  </div>
-                  <div className="text-xs text-gray-600 dark:text-gray-400">Total Items</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                    {vocabularies.filter(v => v.type === "WORD").length}
-                  </div>
-                  <div className="text-xs text-gray-600 dark:text-gray-400">Words</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-green-600 dark:text-green-400">
-                    {vocabularies.filter(v => v.type === "PHRASE").length}
-                  </div>
-                  <div className="text-xs text-gray-600 dark:text-gray-400">Phrases</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
-                    {vocabularies.filter(v => v.type === "SENTENCE").length}
-                  </div>
-                  <div className="text-xs text-gray-600 dark:text-gray-400">Sentences</div>
-                </div>
-              </div>
-            </div>
-          )}
+         
         </div>
       </div>
 
@@ -427,8 +432,8 @@ export default function ChapterContent({
             setVocabToDelete(null);
           }}
           onConfirm={handleConfirmDelete}
-          title="Delete Vocabulary"
-          description="Are you sure you want to delete this vocabulary item?"
+          title={t("vocabulary.admin.deleteVocabulary")}
+          description={t("vocabulary.admin.confirmDelete")}
           itemName={`${vocabToDelete.word} - ${vocabToDelete.translation}`}
           loading={deleteLoading}
         />
@@ -452,8 +457,8 @@ export default function ChapterContent({
             setChapterToDelete(null);
           }}
           onConfirm={handleConfirmChapterDelete}
-          title="Delete Chapter"
-          description="Are you sure you want to delete this chapter? This will also delete all associated vocabulary words."
+          title={t("chapters.admin.deleteChapter")}
+          description={t("chapters.admin.confirmDelete")}
           itemName={chapterToDelete.title}
           loading={chapterDeleteLoading}
         />

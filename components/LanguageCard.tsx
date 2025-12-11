@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslation } from "@/app/i18n/I18nProvider";
 import { Pencil, Trash2 } from "lucide-react";
 
 interface LanguageCardProps {
@@ -27,6 +28,8 @@ export default function LanguageCard({
   onEdit,
   onDelete,
 }: LanguageCardProps) {
+  const { t } = useTranslation();
+
   return (
     <div className="relative group">
       <button
@@ -52,7 +55,7 @@ export default function LanguageCard({
               onEdit?.();
             }}
             className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-lg"
-            title="Edit course"
+            title={t("courses.admin.edit")}
           >
             <Pencil className="w-4 h-4" />
           </button>
@@ -62,7 +65,7 @@ export default function LanguageCard({
               onDelete?.();
             }}
             className="p-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors shadow-lg"
-            title="Delete course"
+            title={t("courses.admin.deleteCourse")}
           >
             <Trash2 className="w-4 h-4" />
           </button>

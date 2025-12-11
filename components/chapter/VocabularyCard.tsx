@@ -5,6 +5,7 @@
 
 import Image from "next/image";
 import { Volume2 } from "lucide-react";
+import { useTranslation } from "@/app/i18n/I18nProvider";
 
 export interface Vocabulary {
   id: number;
@@ -28,6 +29,7 @@ export default function VocabularyCard({
   isSpeaking,
   onSpeak,
 }: VocabularyCardProps) {
+  const {t} = useTranslation();
   return (
     <div className="text-center px-4">
       {/* Image */}
@@ -50,7 +52,7 @@ export default function VocabularyCard({
       
       {/* Word */}
       <div className="mb-4 sm:mb-6">
-        <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-primary mb-3 sm:mb-4 break-words">
+        <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-primary mb-3 sm:mb-4 wrap-break-word">
           {vocabulary.word}
         </h3>
         
@@ -68,7 +70,7 @@ export default function VocabularyCard({
           className="inline-flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base bg-secondary text-white rounded-full hover:bg-secondary/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <Volume2 className={`w-4 h-4 sm:w-5 sm:h-5 ${isSpeaking ? "animate-pulse" : ""}`} />
-          {isSpeaking ? "Playing..." : "Listen"}
+          {isSpeaking ? t("slideshow.playing") : t("slideshow.listen")}
         </button>
       </div>
     </div>

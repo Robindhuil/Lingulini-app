@@ -7,6 +7,7 @@ import RemoveModal from "@/components/RemoveModal";
 import { deleteChapter } from "@/app/actions/chapters";
 import Sidebar from "@/components/pack/Sidebar";
 import { BookOpen } from "lucide-react";
+import { useTranslation } from "@/app/i18n/I18nProvider";
 
 interface Chapter {
   id: number;
@@ -44,6 +45,7 @@ export default function PackContent({ pack, chapters, isAdmin, currentChapterId 
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const router = useRouter();
+  const {t} = useTranslation();
 
   const handleEditChapter = (chapter: Chapter) => {
     setEditingChapter(chapter);
@@ -116,14 +118,14 @@ export default function PackContent({ pack, chapters, isAdmin, currentChapterId 
               {pack.title}
             </h1>
             <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400">
-              Select a chapter from the sidebar to start learning
+              {t("packs.selectChapterToStart")}
             </p>
           </div>
 
           {/* Welcome Card */}
           <div className="card-playful p-4 sm:p-6 lg:p-8 text-center">
             <h2 className="text-xl sm:text-2xl font-bold text-primary mb-3 sm:mb-4">
-              Welcome to {pack.title}! 🎉
+              {t("packs.welcome")} {pack.title}! 🎉
             </h2>
             <p className="text-gray-600 dark:text-gray-400 mb-6">
               This pack contains {chapters.length} chapter{chapters.length !== 1 ? "s" : ""} to help you learn.
@@ -135,37 +137,16 @@ export default function PackContent({ pack, chapters, isAdmin, currentChapterId 
                   <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">
                     {chapters.length}
                   </span>
-                  <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">Chapters</p>
+                  <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">{t("packs.lessons")}</p>
                 </div>
                 <div className="bg-green-100 dark:bg-green-900/30 px-4 py-2 rounded-lg">
                   <span className="text-2xl font-bold text-green-600 dark:text-green-400">
                     {chapters.reduce((sum, ch) => sum + ch._count.vocabularies, 0)}
                   </span>
-                  <p className="text-xs text-green-600 dark:text-green-400 mt-1">Total Words</p>
+                  <p className="text-xs text-green-600 dark:text-green-400 mt-1">{t("packs.words")}</p>
                 </div>
               </div>
             )}
-          </div>
-
-          {/* Tips Card */}
-          <div className="mt-8 bg-linear-to-r from-primary/10 to-secondary/10 dark:from-primary/20 dark:to-secondary/20 rounded-2xl p-6">
-            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-3">
-              💡 Learning Tips
-            </h3>
-            <ul className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
-              <li className="flex items-start gap-2">
-                <span className="text-primary">•</span>
-                <span>Complete chapters in order for the best learning experience</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-primary">•</span>
-                <span>Practice regularly - even 10 minutes a day makes a difference</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-primary">•</span>
-                <span>Review previous chapters to reinforce your memory</span>
-              </li>
-            </ul>
           </div>
         </div>
       </div>
@@ -188,8 +169,8 @@ export default function PackContent({ pack, chapters, isAdmin, currentChapterId 
             setChapterToDelete(null);
           }}
           onConfirm={handleConfirmDelete}
-          title="Delete Chapter"
-          description="Are you sure you want to delete this chapter? This will also delete all associated vocabulary words."
+          title={t("chapters.admin.deleteChapter")}
+          description={t("chapters.admin.confirmDelete")}
           itemName={chapterToDelete.title}
           loading={deleteLoading}
         />

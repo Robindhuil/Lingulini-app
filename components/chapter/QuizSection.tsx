@@ -5,6 +5,7 @@
 
 import { Mic, MicOff, Volume2, CheckCircle } from "lucide-react";
 import type { Vocabulary } from "./VocabularyCard";
+import { useTranslation } from "@/app/i18n/I18nProvider";
 
 interface QuizSectionProps {
   vocabulary: Vocabulary;
@@ -29,14 +30,15 @@ export default function QuizSection({
   onDontKnow,
   onHearAgain,
 }: QuizSectionProps) {
+  const {t} = useTranslation();
   return (
     <div className="animate-fadeIn">
       {/* Quiz Mode - Before showing translation */}
       {!showSuccess && !showHint && (
         <div className="mb-4 sm:mb-6 space-y-3 sm:space-y-4 px-4">
           <div className="text-center">
-            <p className="text-base sm:text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3 break-words">
-              What does &ldquo;{vocabulary.word}&rdquo; mean in English?
+            <p className="text-base sm:text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3 wrap-break-word">
+               {t("slideshow.quiz.whatDoesItMean")} &ldquo;{vocabulary.word}&rdquo;?
             </p>
             
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-center">
@@ -51,12 +53,12 @@ export default function QuizSection({
                 {isListening ? (
                   <>
                     <MicOff className="w-4 h-4 sm:w-5 sm:h-5" />
-                    Listening...
+                    {t("slideshow.quiz.listening")}
                   </>
                 ) : (
                   <>
                     <Mic className="w-4 h-4 sm:w-5 sm:h-5" />
-                    Speak the Answer
+                    {t("slideshow.quiz.repeatTheAnswer")}
                   </>
                 )}
               </button>
@@ -65,14 +67,14 @@ export default function QuizSection({
                 onClick={onDontKnow}
                 className="px-4 sm:px-6 py-2.5 sm:py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-full transition-all text-sm sm:text-base font-semibold"
               >
-                I Don&apos;t Know
+                {t("slideshow.quiz.iDontKnow")}
               </button>
             </div>
           </div>
 
           {spokenText && (
             <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-3 text-center">
-              <p className="text-sm text-gray-600 dark:text-gray-400">You said:</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">{t("slideshow.quiz.youSaid")}</p>
               <p className="text-lg font-semibold text-gray-900 dark:text-white">
                 &ldquo;{spokenText}&rdquo;
               </p>
@@ -87,9 +89,9 @@ export default function QuizSection({
           <div className="bg-blue-100 dark:bg-blue-900/30 rounded-xl sm:rounded-2xl p-4 sm:p-6">
             <div className="text-center mb-3 sm:mb-4">
               <p className="text-base sm:text-lg text-gray-700 dark:text-gray-300 mb-2">
-                The answer is:
+                {t("slideshow.quiz.correctAnswer")}
               </p>
-              <h4 className="text-2xl sm:text-3xl font-bold text-blue-800 dark:text-blue-300 mb-3 break-words">
+              <h4 className="text-2xl sm:text-3xl font-bold text-blue-800 dark:text-blue-300 mb-3 wrap-break-word">
                 {vocabulary.translation}
               </h4>
               <button
@@ -97,10 +99,10 @@ export default function QuizSection({
                 className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-full transition-all text-xs sm:text-sm font-semibold"
               >
                 <Volume2 className="w-3 h-3 sm:w-4 sm:h-4" />
-                Hear it Again
+                {t("slideshow.quiz.hearItAgain")}
               </button>
               <p className="text-sm text-gray-600 dark:text-gray-400 mt-3">
-                Now repeat it to continue
+                {t("slideshow.quiz.nowRepeatItToContinue")}
               </p>
             </div>
           </div>
@@ -117,12 +119,12 @@ export default function QuizSection({
               {isListening ? (
                 <>
                   <MicOff className="w-5 h-5" />
-                  Listening...
+                  {t("slideshow.quiz.listening")}
                 </>
               ) : (
                 <>
                   <Mic className="w-5 h-5" />
-                  Repeat the Answer
+                  {t("slideshow.quiz.repeatTheAnswer")}
                 </>
               )}
             </button>
@@ -130,7 +132,7 @@ export default function QuizSection({
 
           {spokenText && (
             <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-3 text-center">
-              <p className="text-sm text-gray-600 dark:text-gray-400">You said:</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">{t("slideshow.quiz.youSaid")}</p>
               <p className="text-lg font-semibold text-gray-900 dark:text-white">
                 &ldquo;{spokenText}&rdquo;
               </p>
@@ -146,7 +148,7 @@ export default function QuizSection({
             <div className="flex items-center justify-center gap-2 mb-3">
               <CheckCircle className="w-6 h-6 text-green-600 dark:text-green-400" />
               <h4 className="text-2xl font-bold text-green-800 dark:text-green-300">
-                Correct! It&apos;s &ldquo;{vocabulary.translation}&rdquo;
+                {t("slideshow.quiz.correct")} &ldquo;{vocabulary.translation}&rdquo;
               </h4>
             </div>
             
@@ -168,7 +170,7 @@ export default function QuizSection({
             <div className="bg-green-500 text-white px-8 py-6 rounded-2xl shadow-2xl animate-bounce">
               <div className="flex items-center gap-3">
                 <CheckCircle className="w-8 h-8" />
-                <span className="text-2xl font-bold">Correct! 🎉</span>
+                <span className="text-2xl font-bold">{t("slideshow.quiz.correct")} 🎉</span>
               </div>
             </div>
           </div>

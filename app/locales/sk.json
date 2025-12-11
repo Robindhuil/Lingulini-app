@@ -1,42 +1,197 @@
 {
+    "common": {
+        "appName": "Lingulini",
+        "loading": "Načítavanie...",
+        "error": "Nastala chyba. Skúste to znova.",
+        "thisActionCannotBeUndone": "Táto akcia sa nedá vrátiť späť.",
+        "confirm": "Potvrdiť",
+        "cancel": "Zrušiť",
+        "close": "Zatvoriť",
+        "delete": "Odstrániť",
+        "deleting": "Odstraňovanie...",
+        "save": "Uložiť",
+        "saving": "Ukladanie...",
+        "create": "Vytvoriť",
+        "creating": "Vytváranie...",
+        "draft": "Koncept"
+    },
     "navbar": {
         "home": "Domov",
-        "about": "O nás",
-        "contact": "Kontakt",
-        "news": "Novinky",
-        "gallery": "Galéria",
+        "admin": "Admin",
         "login": "Prihlásiť sa",
         "signOut": "Odhlásiť sa"
     },
-    "home": {
-        "title": "Vitajte v MyApp",
-        "subtitle": "Vytvárajte moderné webové aplikácie rýchlejšie s Next.js a Tailwind CSS.",
-        "getStarted": "Začať",
-        "learnMore": "Viac informácií"
-    },
     "footer": {
-        "newsletter": "Newsletter",
-        "getUpdates": "Získaj novinky",
-        "subscribe": "Prihlásiť sa",
-        "rights": "Všetky práva vyhradené.",
-        "terms": "Podmienky",
-        "security": "Bezpečnosť",
-        "contact": "Kontakt"
+        "languages": "Jazyky",
+        "learn": "Nauč sa",
+        "contactUs": "Kontaktuj nás"
     },
     "login": {
         "title": "Vitajte späť",
         "subtitle": "Prihláste sa do svojho účtu",
-        "username": "Používateľské meno",
-        "usernamePlaceholder": "Zadajte používateľské meno",
-        "usernameRequired": "Používateľské meno je povinné",
-        "usernameMinLength": "Používateľské meno musí mať aspoň 3 znaky",
+
+        "email": "Emailová adresa",
+        "emailPlaceholder": "Zadajte emailovú adresu",
+        "emailRequired": "Emailová adresa je povinná",
+        "emailInvalid": "Zadajte platnú emailovú adresu",
+
         "password": "Heslo",
         "passwordPlaceholder": "Zadajte heslo",
         "passwordRequired": "Heslo je povinné",
-        "passwordMinLength": "Heslo musí mať aspoň 6 znakov",
+
         "signIn": "Prihlásiť sa",
-        "signingIn": "Prihlasujem sa...",
-        "serverError": "Chyba servera. Skúste to znova."
+        "signingIn": "Prihlasujem sa..."
+    },
+    "courses": {
+        "title": "Vyber si jazyk a začni cestu s Lingulini!",
+        "subtitle": "Vyber si jazyk, ktorý sa chceš naučiť, a začni svoju cestu",
+        "addEdit": {
+            "addCourse": "Pridať nový jazykový kurz 🎓",
+            "editCourse": "Upraviť jazykový kurz ✏️",
+            "title": "Názov kurzu *",
+            "titlePlaceholder": "Zadajte názov kurzu",
+            "description": "Popis kurzu",
+            "descriptionPlaceholder": "Zadajte popis kurzu",
+            "learningLanguage": "Učiaci sa jazyk *",
+            "selectLanguage": "Vyberte jazyk",
+
+            "forSpeakersOf": "Pre hovoriacich v *",
+            "emoji": "Emodži jazyka",
+            "published": "Publikovaný",
+            "level": {
+                "level": "Úroveň *",
+                "beginner": "Začiatočník",
+                "intermediate": "Stredne pokročilý",
+                "advanced": "Pokročilý"
+            }
+        },
+        "admin": {
+            "addCourse": "Pridať kurz",
+            "editCourse": "Upraviť kurz",
+            "manageCourses": "Spravovať kurzy",
+            "deleteCourse": "Odstrániť kurz",
+            "confirmDelete": "Naozaj chcete odstrániť tento kurz? Touto akciu taktiež odstránite všetky jeho lekcie a materiály."
+        }
+    },
+    "packs": {
+        "packs": "Balíčky 📚",
+        "choosePack": "Vyberte balíček a začnite sa učiť",
+        "chapters": "Lekcie",
+        "noPacksAvilable": "Žiadne balíčky nie sú momentálne dostupné.",
+        "noPacksCheckbackLater": "Skontrolujte to neskôr.",
+
+        "selectChapterToStart": "Vyberte lekciu a začnite sa učiť",
+        "welcome": "Vitajte v balíčku",
+        "words": "slov",
+        "lessons": "lekcií",
+        "addEdit": {
+            "addPack": "Pridať nový balíček 📦",
+            "editPack": "Upraviť balíček ✏️",
+            "title": "Názov balíčka *",
+            "titlePlaceholder": "Zadajte názov balíčka",
+            "description": "Popis balíčka",
+            "descriptionPlaceholder": "Zadajte popis balíčka",
+            "emoji": "Emodži balíčka",
+            "published": "Publikovaný"
+        },
+        "admin": {
+            "edit": "Upraviť balíček",
+            "delete": "Odstrániť balíček",
+            "addPack": "Pridať nový balíček",
+            "managePack": "Vytvorte nový balíček na učenie",
+            "confirmDelete": "Naozaj chcete odstrániť tento balíček? Touto akciu taktiež odstránite všetky jeho lekcie a materiály."
+        }
+    },
+    "chapters": {
+        "title": "Lekcie 🎯",
+        "noChaptersAvailable": "Žiadne lekcie nie sú momentálne dostupné.",
+        "startChapter": "Začať lekciu",
+        "addVocabulary": "Pridať materiál",
+        "addFirstVocabulary": "Pridať prvý materiál",
+        "noVocabularyYet": "Zatiaľ žiadne materiály",
+
+        "chapterSummary": "📊 Zhrnutie lekcie",
+        "totalItems": "Celkový počet položiek",
+        "words": "slov",
+        "phrases": "fráz",
+        "sentences": "viet",
+        "addEdit": {
+            "addChapter": "Pridať novú lekciu 📖",
+            "editChapter": "Upraviť lekciu ✏️",
+            "title": "Názov lekcie *",
+            "titlePlaceholder": "Zadajte názov lekcie",
+            "description": "Popis lekcie",
+            "descriptionPlaceholder": "Zadajte popis lekcie",
+            "published": "Publikované"
+        },
+        "admin": {
+            "addChapter": "Pridať lekciu",
+            "editChapter": "Upraviť lekciu",
+            "deleteChapter": "Odstrániť lekciu",
+            "confirmDelete": "Naozaj chcete odstrániť túto lekciu? Touto akciu taktiež odstránite všetky jej slovíčka."
+        }
+    },
+    "vocabulary": {
+        "addEdit": {
+            "addVocabulary": "Pridať nový materiál 📝",
+            "editVocabulary": "Upraviť materiál ✏️",
+            "type": "Typ *",
+            "word": "Slovo",
+            "wordPlaceholder": "Ahoj",
+            "phrase": "Fráza",
+            "phrasePlaceholder": "Dobré ráno",
+            "sentence": "Veta",
+            "sentencePlaceholder": "Ako sa máš?",
+            "translation": "Preklad *",
+            "wordTranslationPlaceholder": "Hello",
+            "phraseTranslationPlaceholder": "Good morning",
+            "sentenceTranslationPlaceholder": "How are you?",
+            "pronunciation": "Výslovnosť (Voliteľné)",
+            "pronunciationPlaceholder": "ah-hoy",
+
+            "exampleSentence": "Príkladová veta (Voliteľné)",
+            "exampleSentencePlaceholder": "Ahoj! Ako sa máš dnes?",
+            "exampleTranslatedSentence": "Preklad príkladovej vety (Voliteľné)",
+            "exampleTranslatedSentencePlaceholder": "Hello! How are you today?",
+
+            "image": "Obrázok (Voliteľné)",
+            "imagePlaceholder": "https://..."
+        },
+        "admin": {
+            "addVocabulary": "Pridať materiál",
+            "editVocabulary": "Upraviť materiál",
+            "deleteVocabulary": "Odstrániť materiál",
+            "confirmDelete": "Naozaj chcete odstrániť tento materiál?"
+        }
+    },
+    "slideshow": {
+        "wordsYouMissed": "📝Slová, ktoré ste nevedeli",
+        "youMissed": "ktoré ste nevedeli",
+        "score": "Skóre",
+        "practice": "Precvič si",
+        "missedWords": "slová, ktoré ste nevedeli",
+        "words": "slov",
+        "letsPracticeWordsYouMissed": "🎯 Poďme si precvičiť slová, ktoré ste nevedeli! Žiadne body tento krát - len učenie.",
+        "playing": "Prehrávanie...",
+        "listen": "Vypočuť",
+        "chapterCompleted": "Lekcia dokončená! 🎉",
+        "percCorrect": "% správne",
+        "youReviewed": "📝 Prešli ste si",
+        "reviewAgain": "Zopakovať lekciu",
+        "finish": "Dokončiť lekciu",
+
+        "quiz": {
+            "listening": "Počúvanie...",
+            "repeatTheAnswer": "Vyslovte odpoveď",
+            "iDontKnow": "Neviem",
+            "youSaid": "Povedali ste:",
+            "correctAnswer": "Správna odpoveď je:",
+            "hearItAgain": "Počúvať to znova",
+            "nowRepeatItToContinue": "Teraz to zopakujte, aby ste pokračovali",
+            "correct": "Správne!",
+            "whatDoesItMean": "Čo to znamená?"
+        }
+
     },
     "adminPanel": {
         "title": "Admin Panel",

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { createPack, updatePack } from "@/app/actions/packs";
 import { X } from "lucide-react";
+import { useTranslation } from "@/app/i18n/I18nProvider";
 
 interface Pack {
   id: number;
@@ -25,6 +26,7 @@ interface AddPackModalProps {
 export default function AddPackModal({ isOpen, onClose, courseId, courseName, editPack = null }: AddPackModalProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const {t} = useTranslation();
   
   const [formData, setFormData] = useState({
     title: "",
@@ -71,7 +73,7 @@ export default function AddPackModal({ isOpen, onClose, courseId, courseName, ed
         setError(result.error || `Failed to ${editPack ? 'update' : 'create'} pack`);
       }
     } catch {
-      setError("An unexpected error occurred");
+      setError(t("common.error"));
     } finally {
       setLoading(false);
     }
@@ -93,7 +95,7 @@ export default function AddPackModal({ isOpen, onClose, courseId, courseName, ed
         <div className="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
           <div>
             <h2 className="text-xl sm:text-2xl font-bold text-primary">
-              {editPack ? "Edit Pack ✏️" : "Add New Pack 📦"}
+              {editPack ? t("packs.addEdit.editPack") : t("packs.addEdit.addPack")}
             </h2>
             <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
               for {courseName}
@@ -118,7 +120,7 @@ export default function AddPackModal({ isOpen, onClose, courseId, courseName, ed
           {/* Title */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-              Pack Title *
+              {t("packs.addEdit.title")}
             </label>
             <input
               type="text"
@@ -126,28 +128,28 @@ export default function AddPackModal({ isOpen, onClose, courseId, courseName, ed
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
               className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-              placeholder="e.g., Basic Greetings, Food & Dining"
+              placeholder={t("packs.addEdit.titlePlaceholder")}
             />
           </div>
 
           {/* Description */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-              Description
+              {t("packs.addEdit.description")}
             </label>
             <textarea
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               rows={3}
-              placeholder="Brief description of what this pack teaches..."
+              placeholder={t("packs.addEdit.descriptionPlaceholder")}
             />
           </div>
 
           {/* Emoji */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-              Emoji
+              {t("packs.addEdit.emoji")}
             </label>
             <div className="flex gap-2">
               <input
@@ -182,7 +184,7 @@ export default function AddPackModal({ isOpen, onClose, courseId, courseName, ed
               className="mr-2"
             />
             <label htmlFor="isPublished" className="text-sm font-semibold text-gray-700 dark:text-gray-300 cursor-pointer">
-              Publish immediately
+              {t("packs.addEdit.published")}
             </label>
           </div>
 

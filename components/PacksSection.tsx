@@ -7,6 +7,7 @@ import RemoveModal from "@/components/RemoveModal";
 import { deletePack } from "@/app/actions/packs";
 import { Plus, Book, Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
+import { useTranslation } from "@/app/i18n/I18nProvider";
 
 interface Pack {
   id: number;
@@ -42,6 +43,7 @@ export default function PacksSection({
   const [packToDelete, setPackToDelete] = useState<Pack | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const router = useRouter();
+  const {t} = useTranslation();
 
   const handleEditPack = (pack: Pack, e: React.MouseEvent) => {
     e.preventDefault();
@@ -69,7 +71,7 @@ export default function PacksSection({
         alert(result.error || "Failed to delete pack");
       }
     } catch {
-      alert("An unexpected error occurred");
+      alert(t("common.error"));
     } finally {
       setDeleteLoading(false);
     }
@@ -87,10 +89,10 @@ export default function PacksSection({
         {/* Header */}
         <div className="text-center mb-8 sm:mb-12">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-black mb-3 sm:mb-4 text-primary">
-            {courseName} Packs 📚
+            {courseName} {t("packs.packs")} 
           </h1>
           <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400">
-            Choose a pack to start learning
+            {t("packs.choosePack")}
           </p>
         </div>
 
@@ -113,12 +115,12 @@ export default function PacksSection({
                 )}
                 <div className="flex items-center justify-center gap-2 text-sm text-gray-500 dark:text-gray-500">
                   <Book className="w-4 h-4" />
-                  <span>{pack._count.chapters} chapters</span>
+                  <span>{pack._count.chapters} {t("packs.chapters")}</span>
                 </div>
                 {!pack.isPublished && isAdmin && (
                   <div className="mt-3 text-center">
                     <span className="inline-block px-3 py-1 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-400 text-xs rounded-full">
-                      Draft
+                      {t("common.draft")}
                     </span>
                   </div>
                 )}
@@ -130,14 +132,14 @@ export default function PacksSection({
                   <button
                     onClick={(e) => handleEditPack(pack, e)}
                     className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-lg"
-                    title="Edit pack"
+                    title={t("packs.admin.edit")}
                   >
                     <Pencil className="w-4 h-4" />
                   </button>
                   <button
                     onClick={(e) => handleDeleteClick(pack, e)}
                     className="p-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors shadow-lg"
-                    title="Delete pack"
+                    title={t("packs.admin.delete")}
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -155,10 +157,10 @@ export default function PacksSection({
               <div className="text-center">
                 <Plus className="w-16 h-16 mx-auto text-gray-400 mb-4" />
                 <h3 className="text-xl font-bold text-gray-600 dark:text-gray-400">
-                  Add New Pack
+                  {t("packs.admin.addPack")}
                 </h3>
                 <p className="text-sm text-gray-500 dark:text-gray-500 mt-2">
-                  Create a new learning pack
+                  {t("packs.admin.managePack")}
                 </p>
               </div>
             </button>
@@ -170,10 +172,10 @@ export default function PacksSection({
           <div className="text-center py-16">
             <div className="text-6xl mb-4">📦</div>
             <h3 className="text-2xl font-bold text-gray-600 dark:text-gray-400 mb-2">
-              No packs available yet
+              {t("packs.noPacksAvailable")}
             </h3>
             <p className="text-gray-500 dark:text-gray-500">
-              Check back soon for new learning content!
+              {t("packs.noPacksCheckbackLater")}
             </p>
           </div>
         )}
@@ -197,8 +199,8 @@ export default function PacksSection({
             setPackToDelete(null);
           }}
           onConfirm={handleConfirmDelete}
-          title="Delete Pack"
-          description="Are you sure you want to delete this pack? This will also delete all associated chapters and vocabulary."
+          title={t("packs.admin.delete")}
+          description={t("packs.admin.confirmDelete")}
           itemName={packToDelete.title}
           loading={deleteLoading}
         />
