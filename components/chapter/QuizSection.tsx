@@ -17,6 +17,7 @@ interface QuizSectionProps {
   onStopListening: () => void;
   onDontKnow: () => void;
   onHearAgain: () => void;
+  isSpeakingTarget?: boolean;
 }
 
 export default function QuizSection({
@@ -29,29 +30,39 @@ export default function QuizSection({
   onStopListening,
   onDontKnow,
   onHearAgain,
+  isSpeakingTarget = false,
 }: QuizSectionProps) {
   const {t} = useTranslation();
   return (
     <div className="animate-fadeIn">
       {/* Big kid-friendly speech cue */}
       <div className="flex flex-col items-center mb-8">
-        <div
-          className={`relative flex flex-col items-center justify-center mb-2 transition-all duration-300 
-            ${isListening ? "scale-110" : "scale-100"}`}
+        <button
+          type="button"
+          aria-label={isListening ? t("slideshow.quiz.listening") : t("slideshow.quiz.repeatTheAnswer")}
+          onClick={isListening ? onStopListening : onStartListening}
+          className={`relative flex flex-col items-center justify-center mb-2 transition-all duration-300 rounded-full outline-none border-none
+            ${isListening ? "scale-110 cursor-pointer" : "scale-100 cursor-pointer"}`}
+          tabIndex={0}
+          style={{ boxShadow: 'none' }}
         >
           <div
             className={`rounded-full flex items-center justify-center transition-all duration-300
-              ${isListening ? "bg-green-400 shadow-lg shadow-green-300/60 animate-pulse" : "bg-gray-300 dark:bg-gray-700"}
-              w-24 h-24 sm:w-32 sm:h-32 border-4
-              ${isListening ? "border-green-500" : "border-gray-400 dark:border-gray-600"}`}
+              ${isListening
+                ? "bg-green-400 shadow-lg shadow-green-300/60 animate-pulse border-green-500"
+                : "bg-blue-500 hover:bg-blue-600 border-blue-600"}
+              w-24 h-24 sm:w-32 sm:h-32 border-4`}
           >
             {isListening ? (
               <Mic className="w-16 h-16 sm:w-20 sm:h-20 text-white drop-shadow-lg" />
             ) : (
-              <MicOff className="w-16 h-16 sm:w-20 sm:h-20 text-gray-500 dark:text-gray-300" />
+              <MicOff className="w-16 h-16 sm:w-20 sm:h-20 text-white" />
             )}
           </div>
-        </div>
+          <span className="mt-2 text-base sm:text-lg font-semibold text-gray-800 dark:text-gray-200 select-none">
+            {isListening ? t("slideshow.quiz.listening") : t("slideshow.quiz.repeatTheAnswer")}
+          </span>
+        </button>
       </div>
       {/* Quiz Mode - Before showing translation */}
       {!showSuccess && !showHint && (
@@ -62,27 +73,6 @@ export default function QuizSection({
             </p>
             
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-center">
-              <button
-                onClick={isListening ? onStopListening : onStartListening}
-                className={`inline-flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 rounded-full transition-all text-sm sm:text-base font-semibold ${
-                  isListening
-                    ? "bg-red-500 hover:bg-red-600 text-white animate-pulse"
-                    : "bg-blue-500 hover:bg-blue-600 text-white"
-                }`}
-              >
-                {isListening ? (
-                  <>
-                    <MicOff className="w-4 h-4 sm:w-5 sm:h-5" />
-                    {t("slideshow.quiz.listening")}
-                  </>
-                ) : (
-                  <>
-                    <Mic className="w-4 h-4 sm:w-5 sm:h-5" />
-                    {t("slideshow.quiz.repeatTheAnswer")}
-                  </>
-                )}
-              </button>
-
               <button
                 onClick={onDontKnow}
                 className="px-4 sm:px-6 py-2.5 sm:py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-full transition-all text-sm sm:text-base font-semibold"
@@ -116,10 +106,11 @@ export default function QuizSection({
               </h4>
               <button
                 onClick={onHearAgain}
-                className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-full transition-all text-xs sm:text-sm font-semibold"
+                disabled={isSpeakingTarget}
+                className={`inline-flex items-center gap-2 px-3 sm:px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-full transition-all text-xs sm:text-sm font-semibold ${isSpeakingTarget ? "opacity-50 cursor-not-allowed animate-pulse" : ""}`}
               >
-                <Volume2 className="w-3 h-3 sm:w-4 sm:h-4" />
-                {t("slideshow.quiz.hearItAgain")}
+                <Volume2 className={`w-3 h-3 sm:w-4 sm:h-4 ${isSpeakingTarget ? "animate-pulse" : ""}`} />
+                {isSpeakingTarget ? t("slideshow.playing") : t("slideshow.quiz.hearItAgain")}
               </button>
               <p className="text-sm text-gray-600 dark:text-gray-400 mt-3">
                 {t("slideshow.quiz.nowRepeatItToContinue")}
@@ -127,28 +118,7 @@ export default function QuizSection({
             </div>
           </div>
 
-          <div className="text-center">
-            <button
-              onClick={isListening ? onStopListening : onStartListening}
-              className={`inline-flex items-center gap-2 px-6 py-3 rounded-full transition-all font-semibold ${
-                isListening
-                  ? "bg-red-500 hover:bg-red-600 text-white animate-pulse"
-                  : "bg-blue-500 hover:bg-blue-600 text-white"
-              }`}
-            >
-              {isListening ? (
-                <>
-                  <MicOff className="w-5 h-5" />
-                  {t("slideshow.quiz.listening")}
-                </>
-              ) : (
-                <>
-                  <Mic className="w-5 h-5" />
-                  {t("slideshow.quiz.repeatTheAnswer")}
-                </>
-              )}
-            </button>
-          </div>
+          {/* Removed repeat/stop listening button from hint section as requested */}
 
           {spokenText && (
             <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-3 text-center">

@@ -17,6 +17,7 @@ interface LearningSlideShowProps {
   onClose: () => void;
 }
 
+
 export default function LearningSlideShow({
   vocabularies,
   chapterName,
@@ -27,7 +28,8 @@ export default function LearningSlideShow({
   const [vocabQueue, setVocabQueue] = useState<Vocabulary[]>(vocabularies);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showTranslation, setShowTranslation] = useState(false);
-  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [isSpeakingNative, setIsSpeakingNative] = useState(false);
+  const [isSpeakingTarget, setIsSpeakingTarget] = useState(false);
   const [completed, setCompleted] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showHint, setShowHint] = useState(false);
@@ -97,29 +99,29 @@ export default function LearningSlideShow({
   }, []);
 
   // Handle speaking function - word is in native language (forSpeakersOf)
-  const handleSpeak = useCallback(async (text: string) => {
+  const handleSpeakNative = useCallback(async (text: string) => {
     await speak(text, forSpeakersOf, {
-      onStart: () => setIsSpeaking(true),
-      onEnd: () => setIsSpeaking(false),
-      onError: () => setIsSpeaking(false),
+      onStart: () => setIsSpeakingNative(true),
+      onEnd: () => setIsSpeakingNative(false),
+      onError: () => setIsSpeakingNative(false),
     }, audioRef);
   }, [forSpeakersOf]);
 
   // Auto-start listening after speech ends
   useEffect(() => {
-    if (!isSpeaking && showTranslation && !showHint && !isListening && !showSuccess) {
+    if (!isSpeakingNative && showTranslation && !showHint && !isListening && !showSuccess) {
       const timer = setTimeout(() => {
         startListening();
       }, 500);
       return () => clearTimeout(timer);
     }
-  }, [isSpeaking, showTranslation, showHint, isListening, showSuccess, startListening]);
+  }, [isSpeakingNative, showTranslation, showHint, isListening, showSuccess, startListening]);
 
   // Auto-speak when vocabulary changes
   useEffect(() => {
     if (currentVocab && !showTranslation && !completed) {
       const timer = setTimeout(() => {
-        handleSpeak(currentVocab.word);
+        handleSpeakNative(currentVocab.word);
         // Auto-reveal translation after speech
         setTimeout(() => {
           setShowTranslation(true);
@@ -127,7 +129,7 @@ export default function LearningSlideShow({
       }, 500);
       return () => clearTimeout(timer);
     }
-  }, [currentVocab, showTranslation, completed, handleSpeak]);
+  }, [currentVocab, showTranslation, completed, handleSpeakNative]);
 
   const handleNext = () => {
     setShowTranslation(false);
@@ -185,28 +187,22 @@ export default function LearningSlideShow({
       utterance.rate = 0.8;
       utterance.pitch = 1;
       utterance.volume = 1;
-      
-      setIsSpeaking(true);
-      
+      setIsSpeakingTarget(true);
       utterance.onend = () => {
-        setIsSpeaking(false);
-        // Auto-start listening after a short delay
+        setIsSpeakingTarget(false);
         setTimeout(() => {
           startListening();
         }, 500);
       };
-      
       utterance.onerror = () => {
-        setIsSpeaking(false);
+        setIsSpeakingTarget(false);
       };
-      
       window.speechSynthesis.speak(utterance);
     }
   };
 
   const handleHearAgain = () => {
     stopListening(); // Stop listening first
-    
     if ("speechSynthesis" in window) {
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(currentVocab.translation);
@@ -216,21 +212,16 @@ export default function LearningSlideShow({
       utterance.rate = 0.8;
       utterance.pitch = 1;
       utterance.volume = 1;
-      
-      setIsSpeaking(true);
-      
+      setIsSpeakingTarget(true);
       utterance.onend = () => {
-        setIsSpeaking(false);
-        // Auto-start listening after a short delay
+        setIsSpeakingTarget(false);
         setTimeout(() => {
           startListening();
         }, 500);
       };
-      
       utterance.onerror = () => {
-        setIsSpeaking(false);
+        setIsSpeakingTarget(false);
       };
-      
       window.speechSynthesis.speak(utterance);
     }
   };
@@ -312,8 +303,8 @@ export default function LearningSlideShow({
           
           <VocabularyCard
             vocabulary={currentVocab}
-            isSpeaking={isSpeaking}
-            onSpeak={() => handleSpeak(currentVocab.word)}
+            isSpeaking={isSpeakingNative}
+            onSpeak={() => handleSpeakNative(currentVocab.word)}
           />
 
           {showTranslation && (
@@ -327,6 +318,7 @@ export default function LearningSlideShow({
               onStopListening={stopListening}
               onDontKnow={handleDontKnow}
               onHearAgain={handleHearAgain}
+              isSpeakingTarget={isSpeakingTarget}
             />
           )}
         </div>
