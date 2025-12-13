@@ -11,6 +11,58 @@ export interface SpeechRecognitionCallbacks {
   onIncorrect?: () => void;
 }
 
+/**
+ * Calculate Levenshtein distance between two strings
+ * Used for fuzzy matching to handle minor variations
+ */
+function levenshteinDistance(str1: string, str2: string): number {
+  const matrix: number[][] = [];
+
+  for (let i = 0; i <= str2.length; i++) {
+    matrix[i] = [i];
+  }
+
+  for (let j = 0; j <= str1.length; j++) {
+    matrix[0][j] = j;
+  }
+
+  for (let i = 1; i <= str2.length; i++) {
+    for (let j = 1; j <= str1.length; j++) {
+      if (str2.charAt(i - 1) === str1.charAt(j - 1)) {
+        matrix[i][j] = matrix[i - 1][j - 1];
+      } else {
+        matrix[i][j] = Math.min(
+          matrix[i - 1][j - 1] + 1, // substitution
+          matrix[i][j - 1] + 1,     // insertion
+          matrix[i - 1][j] + 1      // deletion
+        );
+      }
+    }
+  }
+
+  return matrix[str2.length][str1.length];
+}
+
+/**
+ * Check if two words are phonetically similar (homophones or near-homophones)
+ * This helps match words like "bin/been/ben", "board/bored", etc.
+ */
+function arePhoneticallyClose(transcript: string, correctAnswer: string): boolean {
+  const t = transcript.toLowerCase().trim();
+  const a = correctAnswer.toLowerCase().trim();
+  
+  // If strings are very short (1-2 chars), require exact match
+  if (a.length <= 2) {
+    return t === a;
+  }
+  
+  // Calculate similarity threshold based on word length
+  const maxDistance = Math.max(1, Math.floor(a.length * 0.25)); // Allow 25% variation
+  const distance = levenshteinDistance(t, a);
+  
+  return distance <= maxDistance;
+}
+
 export const useSpeechRecognition = (
   correctAnswer: string,
   callbacks?: SpeechRecognitionCallbacks
@@ -33,7 +85,21 @@ export const useSpeechRecognition = (
       recognition.lang = "en-US";
       recognition.continuous = false;
       recognition.interimResults = false;
-      recognition.maxAlternatives = 3;
+      recognition.maxAlternatives = 5; // Increased to get more alternatives
+      
+      // Add grammar hints to improve recognition accuracy for the expected word
+      // This helps the speech recognition engine prioritize the correct word
+      if ((window as any).SpeechGrammarList || (window as any).webkitSpeechGrammarList) {
+        const SpeechGrammarList = (window as any).SpeechGrammarList || (window as any).webkitSpeechGrammarList;
+        const grammarList = new SpeechGrammarList();
+        
+        // Create JSGF grammar with the expected word
+        // This gives the speech engine a hint about what we're expecting
+        const grammar = `#JSGF V1.0; grammar vocabulary; public <word> = ${correctAnswer.toLowerCase()} ;`;
+        grammarList.addFromString(grammar, 1); // Weight of 1 means it's a strong hint
+        
+        recognition.grammars = grammarList;
+      }
 
       recognition.onstart = () => {
         setIsListening(true);
@@ -41,20 +107,53 @@ export const useSpeechRecognition = (
       };
 
       recognition.onresult = (event: any) => {
-        const transcript = event.results[0][0].transcript.toLowerCase().trim();
-        setSpokenText(transcript);
-        console.log("Heard:", transcript);
-        
-        // Check if spoken text matches correct answer
+        const results = event.results[0];
         const answer = correctAnswer.toLowerCase().trim();
-        const isCorrect = transcript === answer || 
-                         transcript.includes(answer) ||
-                         answer.includes(transcript);
+        
+        // Check all alternative transcripts
+        let bestMatch = "";
+        let isCorrect = false;
+        
+        for (let i = 0; i < results.length; i++) {
+          const transcript = results[i].transcript.toLowerCase().trim();
+          const confidence = results[i].confidence;
+          
+          console.log(`Alternative ${i}: "${transcript}" (confidence: ${confidence})`);
+          
+          // Store the first (most confident) transcript for display
+          if (i === 0) {
+            bestMatch = transcript;
+          }
+          
+          // Check for exact match
+          if (transcript === answer) {
+            isCorrect = true;
+            bestMatch = transcript;
+            break;
+          }
+          
+          // Check if the answer is contained in the transcript or vice versa
+          if (transcript.includes(answer) || answer.includes(transcript)) {
+            isCorrect = true;
+            bestMatch = transcript;
+            break;
+          }
+          
+          // Check for phonetic similarity (handles homophones)
+          if (arePhoneticallyClose(transcript, answer)) {
+            isCorrect = true;
+            bestMatch = transcript;
+            break;
+          }
+        }
+        
+        setSpokenText(bestMatch);
+        console.log(`Expected: "${answer}", Best match: "${bestMatch}", Correct: ${isCorrect}`);
         
         if (isCorrect) {
           playSuccessSound();
           callbacksRef.current?.onSuccess?.();
-        } else if (transcript.length > 0) {
+        } else if (bestMatch.length > 0) {
           playFailSound();
           callbacksRef.current?.onIncorrect?.();
         }
