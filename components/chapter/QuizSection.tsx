@@ -3,7 +3,7 @@
  * Handles the interactive quiz with speech recognition and hints
  */
 
-import { Mic, MicOff, Volume2, CheckCircle } from "lucide-react";
+import { Mic, MicOff, Volume2, CheckCircle, Smile, User } from "lucide-react";
 import type { Vocabulary } from "./VocabularyCard";
 import { useTranslation } from "@/app/i18n/I18nProvider";
 
@@ -33,6 +33,26 @@ export default function QuizSection({
   const {t} = useTranslation();
   return (
     <div className="animate-fadeIn">
+      {/* Big kid-friendly speech cue */}
+      <div className="flex flex-col items-center mb-8">
+        <div
+          className={`relative flex flex-col items-center justify-center mb-2 transition-all duration-300 
+            ${isListening ? "scale-110" : "scale-100"}`}
+        >
+          <div
+            className={`rounded-full flex items-center justify-center transition-all duration-300
+              ${isListening ? "bg-green-400 shadow-lg shadow-green-300/60 animate-pulse" : "bg-gray-300 dark:bg-gray-700"}
+              w-24 h-24 sm:w-32 sm:h-32 border-4
+              ${isListening ? "border-green-500" : "border-gray-400 dark:border-gray-600"}`}
+          >
+            {isListening ? (
+              <Mic className="w-16 h-16 sm:w-20 sm:h-20 text-white drop-shadow-lg" />
+            ) : (
+              <MicOff className="w-16 h-16 sm:w-20 sm:h-20 text-gray-500 dark:text-gray-300" />
+            )}
+          </div>
+        </div>
+      </div>
       {/* Quiz Mode - Before showing translation */}
       {!showSuccess && !showHint && (
         <div className="mb-4 sm:mb-6 space-y-3 sm:space-y-4 px-4">
@@ -176,6 +196,16 @@ export default function QuizSection({
           </div>
         </>
       )}
+      {/* Extra playful style for kids */}
+      <style jsx>{`
+        .animate-bounce {
+          animation: bounce 0.8s infinite alternate;
+        }
+        @keyframes bounce {
+          0% { transform: translateY(0); }
+          100% { transform: translateY(-10px); }
+        }
+      `}</style>
     </div>
   );
 }
