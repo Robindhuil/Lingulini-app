@@ -151,6 +151,15 @@ export const useSpeechRecognition = (
         console.log(`Expected: "${answer}", Best match: "${bestMatch}", Correct: ${isCorrect}`);
         
         if (isCorrect) {
+          // Immediately stop recognition and update state to prevent flicker
+          setIsListening(false);
+          if (recognitionRef.current) {
+            try {
+              recognitionRef.current.abort(); // Use abort instead of stop for immediate termination
+            } catch (error) {
+              console.error("Error aborting recognition:", error);
+            }
+          }
           playSuccessSound();
           callbacksRef.current?.onSuccess?.();
         } else if (bestMatch.length > 0) {

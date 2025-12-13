@@ -105,13 +105,13 @@ export default function LearningSlideShow({
 
   // Auto-start listening after speech ends
   useEffect(() => {
-    if (!isSpeaking && showTranslation && !showHint && !isListening) {
+    if (!isSpeaking && showTranslation && !showHint && !isListening && !showSuccess) {
       const timer = setTimeout(() => {
         startListening();
       }, 500);
       return () => clearTimeout(timer);
     }
-  }, [isSpeaking, showTranslation, showHint, isListening, startListening]);
+  }, [isSpeaking, showTranslation, showHint, isListening, showSuccess, startListening]);
 
   // Auto-speak when vocabulary changes
   useEffect(() => {
