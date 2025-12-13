@@ -469,7 +469,8 @@ export default function ChapterContent({
         <LearningSlideShow
           vocabularies={vocabularies}
           chapterName={chapter.title}
-          languageCode={chapter.pack.course.forSpeakersOf}
+          languageCode={chapter.pack.course.languageCode}
+          forSpeakersOf={chapter.pack.course.forSpeakersOf}
           onClose={() => setIsLearningMode(false)}
         />
       )}

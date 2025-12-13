@@ -63,8 +63,47 @@ function arePhoneticallyClose(transcript: string, correctAnswer: string): boolea
   return distance <= maxDistance;
 }
 
+/**
+ * Map language codes to speech recognition locale codes
+ */
+function getRecognitionLocale(languageCode: string): string {
+  const localeMap: { [key: string]: string } = {
+    'en': 'en-US',
+    'es': 'es-ES',
+    'sk': 'sk-SK',
+    'cz': 'cs-CZ',
+    'cs': 'cs-CZ',
+    'ua': 'uk-UA',
+    'uk': 'uk-UA',
+    'de': 'de-DE',
+    'fr': 'fr-FR',
+    'it': 'it-IT',
+    'pt': 'pt-PT',
+    'pl': 'pl-PL',
+    'ru': 'ru-RU',
+    'ja': 'ja-JP',
+    'zh': 'zh-CN',
+    'ko': 'ko-KR',
+    'ar': 'ar-SA',
+    'nl': 'nl-NL',
+    'sv': 'sv-SE',
+    'da': 'da-DK',
+    'no': 'nb-NO',
+    'fi': 'fi-FI',
+    'tr': 'tr-TR',
+    'el': 'el-GR',
+    'he': 'he-IL',
+    'hi': 'hi-IN',
+    'th': 'th-TH',
+    'vi': 'vi-VN',
+  };
+  
+  return localeMap[languageCode.toLowerCase()] || 'en-US';
+}
+
 export const useSpeechRecognition = (
   correctAnswer: string,
+  targetLanguageCode: string,
   callbacks?: SpeechRecognitionCallbacks
 ) => {
   const [isListening, setIsListening] = useState(false);
@@ -82,10 +121,13 @@ export const useSpeechRecognition = (
       const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
       const recognition = new SpeechRecognition();
       
-      recognition.lang = "en-US";
+      const recognitionLocale = getRecognitionLocale(targetLanguageCode);
+      recognition.lang = recognitionLocale;
       recognition.continuous = false;
       recognition.interimResults = false;
       recognition.maxAlternatives = 5; // Increased to get more alternatives
+      
+      console.log(`Speech recognition configured for: ${recognitionLocale}`);
       
       // Add grammar hints to improve recognition accuracy for the expected word
       // This helps the speech recognition engine prioritize the correct word
@@ -185,7 +227,7 @@ export const useSpeechRecognition = (
         recognitionRef.current.stop();
       }
     };
-  }, [correctAnswer]);
+  }, [correctAnswer, targetLanguageCode]);
 
   const startListening = () => {
     if (recognitionRef.current && !isListening) {

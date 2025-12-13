@@ -18,8 +18,8 @@ const courierPrime = Courier_Prime({
 });
 
 export const metadata: Metadata = {
-  title: "MyApp",
-  description: "Modern web application",
+  title: "Lingulini",
+  description: "Language Learning App",
 };
 
 export default function RootLayout({

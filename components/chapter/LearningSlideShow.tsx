@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { X } from "lucide-react";
-import { speak } from "@/utils/textToSpeech";
+import { speak, getVoiceLang } from "@/utils/textToSpeech";
 import { useSpeechRecognition } from "@/hooks/useSpeechRecognition";
 import VocabularyCard, { type Vocabulary } from "./VocabularyCard";
 import QuizSection from "./QuizSection";
@@ -13,6 +13,7 @@ interface LearningSlideShowProps {
   vocabularies: Vocabulary[];
   chapterName: string;
   languageCode: string;
+  forSpeakersOf: string;
   onClose: () => void;
 }
 
@@ -20,6 +21,7 @@ export default function LearningSlideShow({
   vocabularies,
   chapterName,
   languageCode,
+  forSpeakersOf,
   onClose,
 }: LearningSlideShowProps) {
   const [vocabQueue, setVocabQueue] = useState<Vocabulary[]>(vocabularies);
@@ -42,14 +44,14 @@ export default function LearningSlideShow({
   const totalWords = reviewing ? missedWords.length : maxScore;
   const progress = (processedCount / totalWords) * 100;
 
-  // Speech recognition hook
+  // Speech recognition hook - translation field contains target language answer
   const {
     isListening,
     spokenText,
     startListening,
     stopListening,
     resetSpokenText,
-  } = useSpeechRecognition(currentVocab?.translation || "", {
+  } = useSpeechRecognition(currentVocab?.translation || "", languageCode, {
     onSuccess: () => {
       setShowSuccess(true);
       setShowHint(false);
@@ -94,14 +96,14 @@ export default function LearningSlideShow({
     };
   }, []);
 
-  // Handle speaking function
+  // Handle speaking function - word is in native language (forSpeakersOf)
   const handleSpeak = useCallback(async (text: string) => {
-    await speak(text, languageCode, {
+    await speak(text, forSpeakersOf, {
       onStart: () => setIsSpeaking(true),
       onEnd: () => setIsSpeaking(false),
       onError: () => setIsSpeaking(false),
     }, audioRef);
-  }, [languageCode]);
+  }, [forSpeakersOf]);
 
   // Auto-start listening after speech ends
   useEffect(() => {
@@ -173,11 +175,13 @@ export default function LearningSlideShow({
     // Don't reschedule - just show the answer and let them practice
     // They won't get a point but will complete this word
     
-    // Speak the English translation
+    // Speak the translation in the target language
     if ("speechSynthesis" in window) {
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(currentVocab.translation);
-      utterance.lang = "en-US";
+      const targetLanguageLocale = getVoiceLang(languageCode);
+      utterance.lang = targetLanguageLocale;
+      console.log(`🗣️ Speaking translation "${currentVocab.translation}" in target language: ${languageCode} (${targetLanguageLocale})`);
       utterance.rate = 0.8;
       utterance.pitch = 1;
       utterance.volume = 1;
@@ -206,7 +210,9 @@ export default function LearningSlideShow({
     if ("speechSynthesis" in window) {
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(currentVocab.translation);
-      utterance.lang = "en-US";
+      const targetLanguageLocale = getVoiceLang(languageCode);
+      utterance.lang = targetLanguageLocale;
+      console.log(`🗣️ Hear again: "${currentVocab.translation}" in target language: ${languageCode} (${targetLanguageLocale})`);
       utterance.rate = 0.8;
       utterance.pitch = 1;
       utterance.volume = 1;
